@@ -7,7 +7,7 @@
 void eeprom_write(uint16_t address, uint8_t byte)
 {
     /* Ensure previous write has finished. */ 
-    while(EECR & (1<<EEPE));
+    while(EECR & (1 << EEPE));
 
     EEAR = address;
     EEDR = byte; /* Data to write. */

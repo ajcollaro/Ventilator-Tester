@@ -50,12 +50,3 @@ void write_usart(uint8_t *ptr)
     }
 }
 
-void write_lcd(uint8_t *ptr)
-{
-    while(*ptr > 0)
-    {
-        lcd_tx(0, 0, *ptr);
-        ptr++;
-    }
-}
-
