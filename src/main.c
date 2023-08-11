@@ -11,7 +11,7 @@ static uint8_t cycle_count;
 int main(void)
 {
     /* Generous 100ms delay for LCD initialisation. */
-    _delay_ms(50);
+    _delay_ms(100);
     /* Turn display on. */
     lcd_init();
 

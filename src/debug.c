@@ -4,7 +4,6 @@
 #include "sensors/f1031v.h"
 #include "usart/usart.h"
 
-#define I2C_COUNTER " I2C success: "
 #define I2C_STATUS " \tI2C debug: "
 #define DAC_INPUT_HIGH " \tDAC input h: "
 #define DAC_INPUT_LOW " \tDAC input l: "
@@ -23,12 +22,6 @@ void report_debug(void)
     uint8_t dac_input_high = mcp4725_return_byte_high();
     uint8_t dac_input_low = mcp4725_return_byte_low();
     uint16_t measurement = return_measurement();
-
-    memcpy(buffer, I2C_COUNTER, 16);
-    write_usart(ptr);
-
-    itoa(i2c_status_return(), buffer, 10);
-    write_usart(ptr);
     
     memcpy(buffer, I2C_STATUS, 16);
     write_usart(ptr);
