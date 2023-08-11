@@ -5,6 +5,7 @@
 #include "lcd/lcd1602.h"
 #include "usart/usart.h"
 
+static uint8_t master_mode;
 static uint8_t cycle_count;
 
 int main(void)
@@ -30,16 +31,25 @@ int main(void)
     while(1) 
     {
         /* Update analog voltage out. */
-        mcp4725_tx();
-        cycle_count++;
 
-        switch(cycle_count)
+        switch(master_mode)
         {
-            case REPORT_WAITS:
-                report_data(); /* USART and LCD refresh. */
-                cycle_count = 0;
+            case 0: /* Acquisiton mode. */
+                mcp4725_tx();
+                cycle_count++;
+                switch(cycle_count)
+                {
+                    case REPORT_WAITS:
+                    report_data(); /* USART and LCD refresh. */
+                    cycle_count = 0;
+                    break;
+                }
                 break;
+            case 1: /* Calibration (LOW) */
+                
         }
+        
+    }  
         
         _delay_ms(WAIT_TIME_MS);
     }
