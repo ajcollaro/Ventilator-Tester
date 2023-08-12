@@ -37,7 +37,7 @@ void mcp4725_tx(void)
 void mcp4725_update(void)
 {
      /* Sample sensor and rescale value. */
-    measurement = sample_f1031v() * 24.9;
+    measurement = sample_f1031v() * 24;
      /* Grab MSBs. */
     byte_high = measurement / 16;
      /* Grab LSBs. */
