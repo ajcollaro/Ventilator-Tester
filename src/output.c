@@ -10,7 +10,6 @@
 #define UNITS " L/min (STP) "
 #define CALIBRATION_LOW " 0V Calibration "
 #define CALIBRATION_HIGH " 5V Calibration "
-#define SQUARE_WAVE "  Square Waves  "
 
 /* Holds one line of text. */
 static char buffer[16];
@@ -43,9 +42,10 @@ void report_data(void)
     write_usart(ptr);
     forward_bit_address(ptr);
 
-    /* Write debug data if enabled. */
-    if (DEBUG_OUTPUT)
-    {
+    /* Write debug data if enabled.
+     * Fair timing, flash and memory costs so leave disabled unless testing.
+     */
+    if (DEBUG_OUTPUT) {
         report_debug();
     }
 }
