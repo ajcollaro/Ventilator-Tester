@@ -2,12 +2,6 @@
 
 #include "usart.h"
 
-ISR(USART_RX_vect)
-{
-    /* ISR driven USART Rx. */
-    process_input(UDR0);
-}
-
 void usart_tx(uint8_t byte)
 {
     UDR0 = byte;
@@ -23,7 +17,7 @@ void usart_disable()
 
 void usart_init(uint16_t baud_rate)
 {
-    /* Enable Tx and Rx. */
+    /* Enable Tx and Rx, and Rx ISRs. */
     uint16_t baud_prescale = (F_CPU/16/baud_rate)-1;
     UBRR0L = (uint8_t)(baud_prescale & 0xFF);
     UBRR0H = (uint8_t)(baud_prescale >> 8);

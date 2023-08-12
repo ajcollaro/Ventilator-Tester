@@ -5,52 +5,44 @@
 #include "lcd/lcd1602.h"
 #include "usart/usart.h"
 
-static uint8_t master_mode;
 static uint8_t cycle_count;
 
 int main(void)
 {
     /* Generous 100ms delay for LCD initialisation. */
     _delay_ms(100);
-    /* Turn display on. */
     lcd_init();
 
-    /* Load fan defaults. */
-    fan_init();
+    /* Turn on fan. */
+    DDRA = 0xFF;
+    PORTA |= (1 << PORTA7);
 
     /* Bring up USART and ADC. */
     adc_init();
     i2c_init();
     usart_init(BAUD_RATE);
 
-    /* Delay for inits (probably not needed). */
-    _delay_ms(1000);
+    /* Send calibration signal (10 secs at 5V and 0V). */
+    mcp4725_bypass(0xFF, 0xFF); /* Send low. */
+    calibration(1);
+    _delay_ms(10000);
 
-    sei(); /* Enable global interrupts. */
+    mcp4725_bypass(0x00, 0x00); /* Send low. */
+    calibration(0);
+    _delay_ms(10000);
 
     while(1) 
     {
-        /* Update analog voltage out. */
-
-        switch(master_mode)
+        mcp4725_update();
+        cycle_count++;
+        switch(cycle_count)
         {
-            case 0: /* Acquisiton mode. */
-                mcp4725_tx();
-                cycle_count++;
-                switch(cycle_count)
-                {
-                    case REPORT_WAITS:
-                    report_data(); /* USART and LCD refresh. */
-                    cycle_count = 0;
-                    break;
-                }
-                break;
-            case 1: /* Calibration (LOW) */
-                
-        }
-        
-    }  
-        
+            case REPORT_WAITS:
+            report_data(); /* USART and LCD refresh. */
+            cycle_count = 0;
+            break;
+        }  
+
         _delay_ms(WAIT_TIME_MS);
     }
 }

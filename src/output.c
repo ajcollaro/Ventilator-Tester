@@ -1,21 +1,32 @@
 /* Report data via USART and LCD interfaces. */
 
 #include "main.h"
+#include "dac/mcp4725.h"
 #include "i2c/i2c.h"
 #include "lcd/lcd1602.h"
 #include "sensors/f1031v.h"
 #include "usart/usart.h"
 
 #define UNITS " L/min (STP) "
+#define CALIBRATION_LOW " 0V Calibration "
+#define CALIBRATION_HIGH " 5V Calibration "
+#define SQUARE_WAVE "  Square Waves  "
 
 /* Holds one line of text. */
 static char buffer[16];
+static uint8_t *ptr = buffer;
+
+void write_usart(uint8_t *ptr)
+{
+    while(!(*ptr == '\0'))
+    {
+        usart_tx(*ptr);
+        ptr++;
+    }
+}
 
 void report_data(void)
 {
-    /* Address of line. */
-    uint8_t *ptr = buffer;
-
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
 
@@ -24,15 +35,13 @@ void report_data(void)
 
     /* Convert flow to string. */
     itoa(f1031v, buffer, 10);
-
     write_usart(ptr); /* Write over I2C while updating LCD. */
-    forward_bit_address(&buffer); /* Send address for writing to LCD. */
+    forward_bit_address(ptr); /* Send address for writing to LCD. */
 
     /* Send units. */
     memcpy(buffer, UNITS, 16);
-    
     write_usart(ptr);
-    forward_bit_address(&buffer);
+    forward_bit_address(ptr);
 
     /* Write debug data if enabled. */
     if (DEBUG_OUTPUT)
@@ -41,12 +50,21 @@ void report_data(void)
     }
 }
 
-void write_usart(uint8_t *ptr)
+void calibration(uint8_t mode)
 {
-    while(*ptr > 0)
+    lcd_tx_cmd(0x01);
+    
+    switch(mode)
     {
-        usart_tx(*ptr);
-        ptr++;
+        case 0:
+            memcpy(buffer, CALIBRATION_LOW, 16);
+            write_usart(ptr);
+            forward_bit_address(ptr);
+            break;
+        case 1:
+            memcpy(buffer, CALIBRATION_HIGH, 16);
+            write_usart(ptr);
+            forward_bit_address(ptr);
+            break;
     }
 }
-

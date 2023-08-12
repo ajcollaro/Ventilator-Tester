@@ -18,6 +18,7 @@ void report_debug(void)
     /* Address of line. */
     uint8_t *ptr = buffer;
 
+    /* Values to output. */
     uint8_t i2c = TWSR;
     uint8_t dac_input_high = mcp4725_return_byte_high();
     uint8_t dac_input_low = mcp4725_return_byte_low();

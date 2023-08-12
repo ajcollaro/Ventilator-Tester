@@ -2,8 +2,8 @@
 
 #include "i2c.h"
 
-static volatile uint8_t i2c_status;
-static volatile uint8_t i2c_data;
+static uint8_t i2c_status;
+static uint8_t i2c_data;
 
 void i2c_tx(uint8_t byte)
 {

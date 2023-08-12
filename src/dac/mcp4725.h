@@ -10,4 +10,6 @@
 uint8_t mcp4725_return_byte_high(void);
 uint8_t mcp4725_return_byte_low(void);
 uint16_t return_measurement(void);
+void mcp4725_update(void);
 void mcp4725_tx(void);
+void mcp4725_bypass(uint8_t high, uint8_t low);

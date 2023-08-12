@@ -23,13 +23,6 @@ uint16_t return_measurement(void)
 
 void mcp4725_tx(void)
 {
-     /* Rescale value */
-    measurement = sample_f1031v() * 24.9;
-     /* Grab MSBs. */
-    byte_high = measurement / 16;
-     /* Grab LSBs. */
-    byte_low = (measurement % 16) << 4;
- 
     /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
     i2c_tx_start();
     i2c_tx(MCP4725_SLAVE_ADDRESS);
@@ -41,3 +34,25 @@ void mcp4725_tx(void)
     i2c_tx_stop();
 }
 
+void mcp4725_update(void)
+{
+     /* Sample sensor and rescale value. */
+    measurement = sample_f1031v() * 24.9;
+     /* Grab MSBs. */
+    byte_high = measurement / 16;
+     /* Grab LSBs. */
+    byte_low = (measurement % 16) << 4;
+
+    /* Send. */
+    mcp4725_tx();
+}
+
+void mcp4725_bypass(uint8_t high, uint8_t low)
+{
+    /* Pass custom byte values to DAC for calibration. */
+    byte_high = high;
+    byte_low = low;
+
+    /* Send. */
+    mcp4725_tx();
+}

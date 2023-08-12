@@ -2,15 +2,6 @@
 
 static float F1031V; /* Set as volatile if ISR to update this. */ 
 
-ISR(ADC_vect) /* If using ISRs. */
-{
-    /* Interrupt when ADC conversion is complete. */
-    F1031V = ADC;
-
-    /* Start conversion again. */
-    ADCSRA |= (1 << ADSC);
-}
-
 uint16_t sample_f1031v(void)
 {
     ADCSRA |= (1 << ADSC);
