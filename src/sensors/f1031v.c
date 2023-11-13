@@ -1,20 +1,17 @@
 #include "f1031v.h"
 
-static float F1031V; /* Set as volatile if ISR to update this. */ 
-
-uint16_t sample_f1031v(void)
+void sample_f1031v(struct flowsensor *f1031v)
 {
+    /* Initiate conversion. */
     ADCSRA |= (1 << ADSC);
 
     /* Wait for conversion. */
     while((ADCSRA & (1 << ADSC)));
 
     /* Grab value from register. */
-    F1031V = ADC;
+    f1031v->raw = ADC;
 
     /* Convert ADC output to a voltage and solve for y. */
-    float flow = (F1031V * 5) / 1024;
-    flow = (F1031V_M*flow+F1031V_INTERCEPT); 
-
-    return flow;
+    f1031v->flow = (f1031v->raw * 5) / 1024;
+    f1031v->flow = (F1031V_M*f1031v->flow+F1031V_INTERCEPT+F1031V_OFFSET); 
 }

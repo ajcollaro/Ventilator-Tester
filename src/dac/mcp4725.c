@@ -1,10 +1,16 @@
 #include "dac/mcp4725.h"
 #include "i2c/i2c.h"
 #include "sensors/f1031v.h"
+#include "sensors/sensors.h"
 
 static uint16_t measurement;
 static uint8_t byte_high;
 static uint8_t byte_low;
+
+uint16_t return_measurement(void)
+{
+    return measurement;
+}
 
 uint8_t mcp4725_return_byte_high(void)
 {
@@ -14,11 +20,6 @@ uint8_t mcp4725_return_byte_high(void)
 uint8_t mcp4725_return_byte_low(void) 
 {
     return byte_low;
-}
-
-uint16_t return_measurement(void)
-{
-    return measurement;
 }
 
 void mcp4725_tx(void)
@@ -34,12 +35,14 @@ void mcp4725_tx(void)
     i2c_tx_stop();
 }
 
-void mcp4725_update(void)
+void mcp4725_update(struct flowsensor *sensor)
 {
      /* Sample sensor and rescale value. */
-    measurement = sample_f1031v() * 24;
+    measurement = sensor->flow * 24;
+
      /* Grab MSBs. */
     byte_high = measurement / 16;
+    
      /* Grab LSBs. */
     byte_low = (measurement % 16) << 4;
 

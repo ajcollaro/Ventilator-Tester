@@ -24,16 +24,16 @@ void write_usart(uint8_t *ptr)
     }
 }
 
-void report_data(void)
+void report_data(struct flowsensor *sensor)
 {
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
 
-    /* Sample sensor. */
-    uint16_t f1031v = sample_f1031v();
+    /* Sample F1031V. */
+    sample_f1031v(sensor);
 
     /* Convert flow to string. */
-    itoa(f1031v, buffer, 10);
+    itoa(sensor->flow, buffer, 10);
     write_usart(ptr); /* Write over I2C while updating LCD. */
     forward_bit_address(ptr); /* Send address for writing to LCD. */
 

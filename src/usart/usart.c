@@ -10,11 +10,6 @@ void usart_tx(uint8_t byte)
     while(!(UCSR0A & (1 << UDRE0)));
 }
 
-void usart_disable()
-{
-    UCSR0B &= ~(1 << RXEN0)|(1 << TXEN0);
-}
-
 void usart_init(uint16_t baud_rate)
 {
     /* Enable Tx and Rx, and Rx ISRs. */

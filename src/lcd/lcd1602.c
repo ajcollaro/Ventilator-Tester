@@ -79,13 +79,6 @@ void lcd_tx_cmd(uint8_t byte)
 
 void lcd_init(void)
 {
-    /* Cycle. */
-    DDRC = 0x00;
-    DDRD = 0x00;
-    DDRL = 0x00;
-
-    _delay_ms(1000);
-    
     /* Set data pins. */
     DDRC = 0xFF;
     DDRD = 0xFF;

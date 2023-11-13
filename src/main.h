@@ -1,4 +1,5 @@
 #include "avr.h"
+#include "sensors/sensors.h"
 #include <string.h>
 
 #define BAUD_RATE 9600
@@ -7,7 +8,7 @@
 #define DEBUG_OUTPUT 0 /* Output additional data via USART. Disable unless testing. */
 
 void write_usart(uint8_t *ptr);
-void report_data(void);
+void report_data(struct flowsensor *sensor);
 void calibration(uint8_t mode);
 
 void report_debug(void);
