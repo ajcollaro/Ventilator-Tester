@@ -1,5 +1,15 @@
+#ifndef __USART_H__
+#define __USART_H__
+
 #include "main.h"
 
-void usart_tx(uint8_t byte);
-void usart_disable();
-void usart_init(uint16_t baud_rate);
+struct usart {
+    uint8_t byte;
+    uint16_t baud;
+    uint16_t prescale;
+};
+
+void usart_tx(struct usart *usart);
+void usart_init(struct usart *usart);
+
+#endif

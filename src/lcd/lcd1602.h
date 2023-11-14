@@ -1,3 +1,6 @@
+#ifndef __LCD_H__
+#define __LCD_H__
+
 #include "main.h"
 
 /* Physical connections to LCD. */
@@ -15,3 +18,5 @@ void forward_bit_address(uint8_t *byte);
 void lcd_tx_data(uint8_t byte);
 void lcd_tx_cmd(uint8_t byte);
 void lcd_init(void);
+
+#endif

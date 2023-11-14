@@ -1,6 +1,5 @@
-/* Report data via USART and LCD interfaces. */
-
 #include "main.h"
+#include "dac/dac.h"
 #include "dac/mcp4725.h"
 #include "i2c/i2c.h"
 #include "lcd/lcd1602.h"
@@ -24,7 +23,7 @@ void write_usart(uint8_t *ptr)
     }
 }
 
-void report_data(struct flowsensor *sensor)
+void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart, struct i2c *i2c)
 {
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
@@ -46,7 +45,7 @@ void report_data(struct flowsensor *sensor)
      * Fair timing, flash and memory costs so leave disabled unless testing.
      */
     if (DEBUG_OUTPUT) {
-        report_debug();
+        report_debug(dac, usart, i2c);
     }
 }
 

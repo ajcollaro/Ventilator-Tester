@@ -1,5 +1,3 @@
-/* LCD1602 4-bit Driver. */
-
 #include "lcd/lcd1602.h"
 
 static void write_nibble(uint8_t byte)

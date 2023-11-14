@@ -1,3 +1,4 @@
+#include "main.h"
 #include "f1031v.h"
 
 void sample_f1031v(struct flowsensor *f1031v)

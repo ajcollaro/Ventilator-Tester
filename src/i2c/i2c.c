@@ -1,14 +1,9 @@
-/* I2C Driver. */
-
 #include "i2c.h"
 
-static uint8_t i2c_status;
-static uint8_t i2c_data;
-
-void i2c_tx(uint8_t byte)
+void i2c_tx(struct i2c *i2c)
 {
     /* Send byte of data to slave device. */
-    TWDR = byte;
+    TWDR = i2c->byte;
     TWCR = (1 << TWINT)|(1 << TWEN);
 
     while(!(TWCR & (1 << TWINT)));

@@ -1,5 +1,7 @@
+#ifndef __MCP4725_H__
+#define __MCP4725_H__
+
 #include "main.h"
-#include "sensors/sensors.h"
 
 /* Device Address:
    1100010 (0x62) or 1100011 (0x63)
@@ -8,10 +10,8 @@
 
 #define MCP4725_SLAVE_ADDRESS 0x63<<1
 
-uint16_t return_measurement(void);
-uint8_t mcp4725_return_byte_high(void);
-uint8_t mcp4725_return_byte_low(void);
+void mcp4725_update(struct flowsensor *sensor, struct dac *mcp4725);
+void mcp4725_tx(struct dac *mcp4725);
+void mcp4725_bypass(struct dac *mcp4725);
 
-void mcp4725_update(struct flowsensor *sensor);
-void mcp4725_tx(void);
-void mcp4725_bypass(uint8_t high, uint8_t low);
+#endif
