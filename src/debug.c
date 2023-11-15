@@ -8,12 +8,10 @@
 
 /* Holds one line of text. */
 static char buffer[16];
+static uint8_t *ptr = buffer;
 
 void report_debug(struct dac *dac, struct usart *usart, struct i2c *bus)
 {
-    /* Address of line. */
-    uint8_t *ptr = buffer;
-
     /* Values to output. */
     bus->status = TWSR;
     

@@ -32,7 +32,7 @@ int main(void)
 
     /* Send calibration signal (10 secs at 5V and 0V). */
     dac_ptr->byte_high = 0xFF, dac_ptr->byte_low = 0xFF;
-    mcp4725_tx(dac_ptr, bus_ptr); /* Send low. */
+    mcp4725_tx(dac_ptr, bus_ptr); /* Send high. */
     calibration(1);
 
     _delay_ms(10000);

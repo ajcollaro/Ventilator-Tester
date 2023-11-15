@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define UNITS " L/min (STP) "
+#define UNITS " L/min (STP)"
 #define CALIBRATION_LOW " 0V Calibration "
 #define CALIBRATION_HIGH " 5V Calibration "
 
@@ -25,7 +25,7 @@ void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart
     /* Sample F1031V. */
     sample_f1031v(sensor);
 
-    uint16_t sample = (uint16_t)sensor->flow; /* Hacky. */
+    uint16_t sample = (uint16_t)sensor->flow;
 
     /* Convert flow to string. */
     itoa(sample, buffer, 10);

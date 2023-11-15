@@ -32,9 +32,7 @@ void mcp4725_tx(struct dac *mcp4725, struct i2c *bus)
 void mcp4725_update(struct flowsensor *sensor, struct dac *mcp4725, struct i2c *bus)
 {
     /* Sample sensor and rescale value. */
-    uint16_t sample = (uint16_t)sensor->flow;
-    sample *= 24;
-    mcp4725->measurement = sample;
+    mcp4725->measurement = sensor->flow * 24;
 
      /* Grab MSBs. */
     mcp4725->byte_high = mcp4725->measurement / 16;
