@@ -37,7 +37,7 @@ int main(void)
 
     _delay_ms(10000);
 
-    dac_ptr->byte_low = 0x00, dac_ptr->byte_low = 0x00;
+    dac_ptr->byte_high = 0x00, dac_ptr->byte_low = 0x00;
     mcp4725_tx(dac_ptr, bus_ptr); /* Send low. */
     calibration(0);
 
