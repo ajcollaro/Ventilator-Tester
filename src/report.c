@@ -1,10 +1,4 @@
 #include "main.h"
-#include "dac/dac.h"
-#include "dac/mcp4725.h"
-#include "i2c/i2c.h"
-#include "lcd/lcd1602.h"
-#include "sensors/f1031v.h"
-#include "usart/usart.h"
 
 #define UNITS " L/min (STP) "
 #define CALIBRATION_LOW " 0V Calibration "
@@ -18,12 +12,12 @@ void write_usart(uint8_t *ptr)
 {
     while(!(*ptr == '\0'))
     {
-        usart_tx(*ptr);
+        usart_tx(ptr);
         ptr++;
     }
 }
 
-void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart, struct i2c *i2c)
+void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart, struct i2c *bus)
 {
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
@@ -31,8 +25,10 @@ void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart
     /* Sample F1031V. */
     sample_f1031v(sensor);
 
+    uint16_t sample = (uint16_t)sensor->flow; /* Hacky. */
+
     /* Convert flow to string. */
-    itoa(sensor->flow, buffer, 10);
+    itoa(sample, buffer, 10);
     write_usart(ptr); /* Write over I2C while updating LCD. */
     forward_bit_address(ptr); /* Send address for writing to LCD. */
 
@@ -45,7 +41,7 @@ void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart
      * Fair timing, flash and memory costs so leave disabled unless testing.
      */
     if (DEBUG_OUTPUT) {
-        report_debug(dac, usart, i2c);
+        report_debug(dac, usart, bus);
     }
 }
 

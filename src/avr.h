@@ -1,6 +1,3 @@
-#ifndef __AVR_H__
-#define __AVR_H__
-
 /* Speed of MCU in Hz. */
 #ifndef F_CPU
 #define F_CPU 16000000
@@ -9,5 +6,3 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
-#endif

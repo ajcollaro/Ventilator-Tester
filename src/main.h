@@ -2,10 +2,6 @@
 #define __MAIN_H__
 
 #include "avr.h"
-#include "dac/dac.h"
-#include "i2c/i2c.h"
-#include "sensors/sensors.h"
-#include "usart/usart.h"
 #include <string.h>
 
 #define BAUD_RATE 9600
@@ -13,10 +9,53 @@
 #define REPORT_WAITS 25 /* LCD and USART waits before refresh. */
 #define DEBUG_OUTPUT 0 /* Output additional data via USART. Disable unless testing. */
 
-void write_usart(uint8_t *ptr);
-void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart, struct i2c *i2c);
-void calibration(uint8_t mode);
+struct dac {
+    uint8_t byte_high;
+    uint8_t byte_low;
+    uint16_t measurement;
+};
 
-void report_debug(struct dac *dac, struct usart *usart, struct i2c *i2c);
+struct usart {
+    uint8_t byte;
+    uint16_t baud;
+    uint16_t prescale;
+};
+
+struct i2c {
+    uint8_t status;
+    uint8_t byte;
+};
+
+struct flowsensor {
+    float raw; /* ADC return. */
+    float flow;
+};
+
+void adc_init(void);
+
+void report_debug(struct dac *, struct usart *, struct i2c *);
+
+void sample_f1031v(struct flowsensor *);
+
+void mcp4725_update(struct flowsensor *, struct dac *, struct i2c *);
+void mcp4725_tx(struct dac *, struct i2c *);
+void mcp4725_bypass(struct dac *);
+
+void i2c_tx(struct i2c *);
+void i2c_tx_stop(void);
+void i2c_tx_start(void);
+void i2c_init(void);
+
+void forward_bit_address(uint8_t *);
+void lcd_tx_data(uint8_t byte);
+void lcd_tx_cmd(uint8_t byte);
+void lcd_init(void);
+
+void usart_tx(struct usart *);
+void usart_init(struct usart *);
+
+void write_usart(uint8_t *);
+void report_data(struct flowsensor *, struct dac *, struct usart *, struct i2c *);
+void calibration(uint8_t mode);
 
 #endif

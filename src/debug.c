@@ -9,18 +9,18 @@
 /* Holds one line of text. */
 static char buffer[16];
 
-void report_debug(struct dac *dac, struct usart *usart, struct i2c *i2c)
+void report_debug(struct dac *dac, struct usart *usart, struct i2c *bus)
 {
     /* Address of line. */
     uint8_t *ptr = buffer;
 
     /* Values to output. */
-    i2c->status = TWSR;
+    bus->status = TWSR;
     
     memcpy(buffer, I2C_STATUS, 16);
     write_usart(ptr);
 
-    itoa(i2c->status, buffer, 10);
+    itoa(bus->status, buffer, 10);
     write_usart(ptr);
 
     memcpy(buffer, DAC_INPUT_HIGH, 16);
