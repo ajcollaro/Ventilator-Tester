@@ -1,9 +1,9 @@
 #include "main.h"
 
-static uint8_t cycle_count;
-
 int main(void)
 {
+    uint8_t cycle;
+
     /* Delay after power-on for LCD initialisation. */
     _delay_ms(1000);
     lcd_init();
@@ -46,12 +46,12 @@ int main(void)
     while(1) 
     {
         mcp4725_update(sensor, dac_ptr, bus_ptr);
-        cycle_count++;
-        switch(cycle_count)
+        cycle++;
+        switch(cycle)
         {
             case REPORT_WAITS:
                 report_data(sensor, dac_ptr, usart_ptr, bus_ptr); /* USART and LCD refresh. */
-                cycle_count = 0;
+                cycle = 0;
             break;
         }  
 

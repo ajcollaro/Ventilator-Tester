@@ -5,30 +5,26 @@
 #include <string.h>
 
 #define BAUD_RATE 9600
-#define WAIT_TIME_MS 20 /* Wait time in milliseconds. */
+#define WAIT_TIME_MS 5 /* Wait time in milliseconds. */
 #define REPORT_WAITS 25 /* LCD and USART waits before refresh. */
 #define DEBUG_OUTPUT 0 /* Output additional data via USART. Disable unless testing. */
 
 struct dac {
-    uint8_t byte_high;
-    uint8_t byte_low;
+    uint8_t byte_high, byte_low;
     uint16_t measurement;
 };
 
 struct usart {
     uint8_t byte;
-    uint16_t baud;
-    uint16_t prescale;
+    uint16_t baud, prescale;
 };
 
 struct i2c {
-    uint8_t status;
-    uint8_t byte;
+    uint8_t status, byte;
 };
 
 struct flowsensor {
-    float raw; /* ADC return. */
-    float flow;
+    float raw, flow;
 };
 
 void adc_init(void);

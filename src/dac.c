@@ -34,11 +34,11 @@ void mcp4725_update(struct flowsensor *sensor, struct dac *mcp4725, struct i2c *
     /* Sample sensor and rescale value. */
     mcp4725->measurement = sensor->flow * 24;
 
-     /* Grab MSBs. */
-    mcp4725->byte_high = mcp4725->measurement / 16;
+    /* Grab MSBs. */
+    mcp4725->byte_high = mcp4725->measurement >> 8;
     
-     /* Grab LSBs. */
-    mcp4725->byte_low = (mcp4725->measurement % 16) << 4;
+    /* Grab LSBs. */
+    mcp4725->byte_high = mcp4725->measurement; /* 8 LSBs carried from 16-bit value. */
 
     /* Send. */
     mcp4725_tx(mcp4725, bus);
