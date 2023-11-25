@@ -8,7 +8,7 @@ int main(void)
     _delay_ms(1000);
     lcd_init();
 
-    /* Bring up ADC and comms. */
+    /* Bring up ADC. */
     adc_init();
 
     /* I2C bus for connection to DAC. */
@@ -35,13 +35,13 @@ int main(void)
     mcp4725_tx(dac_ptr, bus_ptr); /* Send high. */
     calibration(1);
 
-    _delay_ms(10000);
+    _delay_ms(1000);
 
     dac_ptr->byte_high = 0x00, dac_ptr->byte_low = 0x00;
     mcp4725_tx(dac_ptr, bus_ptr); /* Send low. */
     calibration(0);
 
-    _delay_ms(10000);
+    _delay_ms(1000);
 
     while(1) 
     {

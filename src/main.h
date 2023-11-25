@@ -7,7 +7,7 @@
 #define BAUD_RATE 9600
 #define WAIT_TIME_MS 5 /* Wait time in milliseconds. */
 #define REPORT_WAITS 25 /* LCD and USART waits before refresh. */
-#define DEBUG_OUTPUT 0 /* Output additional data via USART. Disable unless testing. */
+#define DEBUG_OUTPUT 1 /* Output additional data via USART. Disable unless testing. */
 
 struct dac {
     uint8_t byte_high, byte_low;

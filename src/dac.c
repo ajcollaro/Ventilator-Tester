@@ -13,7 +13,7 @@ void mcp4725_tx(struct dac *mcp4725, struct i2c *bus)
     /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
     i2c_tx_start();
 
-    bus->byte = MCP4725_SLAVE_ADDRESS;
+    bus->byte = MCP4725_SLAVE_ADDRESS_SIMULATION;
     i2c_tx(bus); /* Send SLA+W. */
 
     bus->byte = 0x40;
@@ -35,10 +35,12 @@ void mcp4725_update(struct flowsensor *sensor, struct dac *mcp4725, struct i2c *
     mcp4725->measurement = sensor->flow * 24;
 
     /* Grab MSBs. */
-    mcp4725->byte_high = mcp4725->measurement >> 8;
+    uint16_t sample = (mcp4725->measurement & 0xFF00);
+    sample >>= 8;
+    mcp4725->byte_high = (uint8_t)sample;
     
     /* Grab LSBs. */
-    mcp4725->byte_high = mcp4725->measurement; /* 8 LSBs carried from 16-bit value. */
+    mcp4725->byte_low = mcp4725->measurement; /* 8 LSBs from 16-bit value. */
 
     /* Send. */
     mcp4725_tx(mcp4725, bus);
