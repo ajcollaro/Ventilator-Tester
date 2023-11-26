@@ -46,6 +46,7 @@ int main(void)
     while(1) 
     {
         /* Sample flow sensor and send updated data to DAC. */
+        sample_f1031v(sensor);
         mcp4725_update(sensor, dac_ptr, bus_ptr);
 
         /* Update USART and LCD at lower tick (else DAC performance is effected). */

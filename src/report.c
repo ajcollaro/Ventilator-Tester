@@ -22,9 +22,6 @@ void report_data(struct flowsensor *sensor, struct dac *dac, struct usart *usart
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
 
-    /* Sample F1031V. */
-    sample_f1031v(sensor);
-
     /* Convert flow to string. */
     itoa((uint16_t)sensor->flow, buffer, 10);
     write_usart(ptr); /* Write over I2C while updating LCD. */
