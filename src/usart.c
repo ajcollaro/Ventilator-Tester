@@ -11,7 +11,7 @@ void usart_tx(struct usart_t *serial)
 void usart_init(struct usart_t *serial)
 {
     /* Enable Tx and Rx, and Rx ISRs. */
-    serial->prescale = (F_CPU/16/serial->baud)-1;
+    serial->prescale = (F_CPU / 16 / serial->baud) - 1;
     UBRR0L = (uint8_t)(serial->prescale & 0xFF);
     UBRR0H = (uint8_t)(serial->prescale >> 8);
 

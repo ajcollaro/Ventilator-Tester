@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define BAUD_RATE 9600
-#define REPORT_WAITS 500 /* LCD and USART waits before refresh. */
+#define REPORT_WAITS 255 /* LCD and USART waits before refresh. */
 
 struct dac_t {
     uint8_t byte_high, byte_low;

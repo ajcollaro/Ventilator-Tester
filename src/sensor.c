@@ -10,5 +10,5 @@ void sample_f1031v(struct sensor_t *f1031v)
 
     /* Get value from register and convert to flow. */
     f1031v->flow = ADC / (1023 / 5);
-    f1031v->flow = 150 * f1031v->flow / 5;
+    f1031v->flow = 150 * (f1031v->flow - 0.5) / (4.5 - 0.5);
 }

@@ -13,7 +13,7 @@ void mcp4725_tx(struct dac_t *mcp4725, struct i2c_t *i2c)
     /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
     i2c_tx_start();
 
-    i2c->byte = MCP4725_SLAVE_ADDRESS_SIMULATION;
+    i2c->byte = MCP4725_SLAVE_ADDRESS;
     i2c_tx(i2c); /* Send SLA+W. */
 
     i2c->byte = 0x40;
@@ -31,11 +31,14 @@ void mcp4725_tx(struct dac_t *mcp4725, struct i2c_t *i2c)
 
 void mcp4725_update(struct sensor_t *sensor, struct dac_t *mcp4725, struct i2c_t *i2c)
 {
-    /* Rescale value. */
-    mcp4725->measurement = sensor->flow * 24;
+    /* Scale value so to output a maximum of ~4.62V,
+     * and a minimum of 0.5V to avoid integer underflow during EPAP.
+     */
+    mcp4725->measurement = sensor->flow * 18 + 750;
 
-    mcp4725->byte_high = mcp4725->measurement / 16;
-    mcp4725->byte_low = (mcp4725->measurement % 16) << 4;
+    /* Split high and low bytes. */
+    mcp4725->byte_high = (uint8_t)(mcp4725->measurement >> 4);
+    mcp4725->byte_low = (uint8_t)(mcp4725->measurement & 0xFF);
 
     /* Send. */
     mcp4725_tx(mcp4725, i2c);
