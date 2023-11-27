@@ -1,9 +1,5 @@
 #include "main.h"
 
-#define F1031V_M 36.463 
-#define F1031V_INTERCEPT -18.036
-#define F1031V_OFFSET 100
-
 void sample_f1031v(struct sensor_t *f1031v)
 {
     /* Initiate conversion. */
