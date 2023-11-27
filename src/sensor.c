@@ -13,6 +13,6 @@ void sample_f1031v(struct sensor_t *f1031v)
     while((ADCSRA & (1 << ADSC)));
 
     /* Get value from register and convert to flow. */
-    float voltage = ADC / (1023 / 5);
-    f1031v->flow = 150 * voltage / 5;
+    f1031v->flow = ADC / (1023 / 5);
+    f1031v->flow = 150 * f1031v->flow / 5;
 }

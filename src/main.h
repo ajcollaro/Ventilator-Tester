@@ -22,7 +22,7 @@ struct i2c_t {
 };
 
 struct sensor_t {
-    float raw, flow;
+    float flow;
 };
 
 void adc_init(void);
