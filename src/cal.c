@@ -7,11 +7,11 @@ void calibrate(struct dac_t *dac, struct i2c_t *i2c)
     mcp4725_tx(dac, i2c);
     calibration(1);
 
-    _delay_ms(1000);
+    _delay_ms(10000);
 
     dac->byte_high = 0x00, dac->byte_low = 0x00;
     mcp4725_tx(dac, i2c);
     calibration(0);
 
-    _delay_ms(1000);
+    _delay_ms(10000);
 }
