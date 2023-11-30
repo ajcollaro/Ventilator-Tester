@@ -9,7 +9,7 @@
 
 struct dac_t {
     uint8_t byte_high, byte_low;
-    uint16_t measurement;
+    uint16_t value;
 };
 
 struct usart_t {
@@ -22,10 +22,12 @@ struct i2c_t {
 };
 
 struct sensor_t {
-    float flow;
+    float flow, processed;
 };
 
 void adc_init(void);
+
+void calibrate(struct dac_t *, struct i2c_t *);
 
 void report_debug(struct sensor_t *, struct dac_t *, struct usart_t *, struct i2c_t *);
 

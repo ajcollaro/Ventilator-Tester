@@ -22,18 +22,8 @@ int main(void)
     serial_ptr->baud = 9600;
     usart_init(serial_ptr);
 
-    /* Send calibration signal (10 secs at 5V and 0V). */
-    dac->byte_high = 0xFF, dac->byte_low = 0xFF;
-    mcp4725_tx(dac, i2c_ptr); /* Send high. */
-    calibration(1);
-
-    _delay_ms(10000);
-
-    dac->byte_high = 0x00, dac->byte_low = 0x00;
-    mcp4725_tx(dac, i2c_ptr); /* Send low. */
-    calibration(0);
-
-    _delay_ms(10000);
+    /* Send calibration signal. */
+    calibrate(dac, i2c_ptr);
 
     while(1) 
     {
@@ -43,12 +33,13 @@ int main(void)
 
         /* Update LCD at lower tick (else DAC performance is effected). */
         cycle++;
-        switch(cycle)
+
+        if (cycle == REPORT_WAITS)
         {
-            case REPORT_WAITS:
-                report_data(sensor, dac, serial_ptr, i2c_ptr);
-                cycle = 0;
-            break;
+            report_data(sensor, dac, serial_ptr, i2c_ptr);
+            cycle = 0;
         }  
     }
+
+    return 0;
 }

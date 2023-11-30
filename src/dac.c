@@ -34,11 +34,11 @@ void mcp4725_update(struct sensor_t *sensor, struct dac_t *mcp4725, struct i2c_t
     /* Scale value so to output a maximum of ~4.62V,
      * and a minimum of 0.5V to avoid integer underflow during EPAP.
      */
-    mcp4725->measurement = sensor->flow * 18 + 750;
+    mcp4725->value = sensor->processed * 18 + 750;
 
     /* Split high and low bytes. */
-    mcp4725->byte_high = (uint8_t)(mcp4725->measurement >> 4);
-    mcp4725->byte_low = (uint8_t)(mcp4725->measurement & 0xFF);
+    mcp4725->byte_high = (uint8_t)(mcp4725->value >> 4);
+    mcp4725->byte_low = (uint8_t)(mcp4725->value & 0xFF);
 
     /* Send. */
     mcp4725_tx(mcp4725, i2c);

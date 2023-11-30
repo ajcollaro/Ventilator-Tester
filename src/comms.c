@@ -1,8 +1,8 @@
 #include "main.h"
 
 #define UNITS " L/min (STP) "
-#define CALIBRATION_LOW " 0V Calibration "
-#define CALIBRATION_HIGH " 5V Calibration "
+#define CALIBRATION_LOW " 0V Calibration"
+#define CALIBRATION_HIGH " 5V Calibration"
 
 /* Holds one line of text. */
 static char buffer[16];
@@ -22,14 +22,16 @@ void report_data(struct sensor_t *sensor, struct dac_t *dac, struct usart_t *ser
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
 
+    uint16_t sample = sensor->flow;
+
     /* Convert flow to string. */
-    itoa(sensor->flow, buffer, 10);
-    //write_usart(ptr); /* Write over I2C while updating LCD. */
+    itoa(sample, buffer, 10);
+    write_usart(ptr);
     forward_bit_address(ptr); /* Send address for writing to LCD. */
     
     /* Send units. */
     memcpy(buffer, UNITS, 16);
-    //write_usart(ptr);
+    write_usart(ptr);
     forward_bit_address(ptr);
 }
 
@@ -41,12 +43,10 @@ void calibration(uint8_t mode)
     {
         case 0:
             memcpy(buffer, CALIBRATION_LOW, 16);
-            write_usart(ptr);
             forward_bit_address(ptr);
             break;
         case 1:
             memcpy(buffer, CALIBRATION_HIGH, 16);
-            write_usart(ptr);
             forward_bit_address(ptr);
             break;
     }

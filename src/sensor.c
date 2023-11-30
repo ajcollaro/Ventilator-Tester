@@ -1,5 +1,9 @@
 #include "main.h"
 
+#define F1031V_M 36.463 
+#define F1031V_INTERCEPT -18.036
+#define F1031V_OFFSET 50
+
 void sample_f1031v(struct sensor_t *f1031v)
 {
     /* Initiate conversion. */
@@ -9,6 +13,9 @@ void sample_f1031v(struct sensor_t *f1031v)
     while((ADCSRA & (1 << ADSC)));
 
     /* Get value from register and convert to flow. */
-    f1031v->flow = ADC / (1023 / 5);
-    f1031v->flow = 150 * (f1031v->flow - 0.5) / (4.5 - 0.5);
+    f1031v->flow = ((float)ADC * 5) / 1024;
+    f1031v->flow = F1031V_M*f1031v->flow+F1031V_INTERCEPT; 
+
+    /* Avoid integer underflow during EPAP. */
+    f1031v->processed = f1031v->flow + F1031V_OFFSET;
 }
