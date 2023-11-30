@@ -22,15 +22,13 @@ void report_data(struct sensor_t *sensor, struct dac_t *dac, struct usart_t *ser
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
 
-    uint16_t sample = sensor->flow;
-
     /* Convert flow to string. */
-    itoa(sample, buffer, 10);
+    itoa((uint16_t)sensor->flow, buffer, 10);
     write_usart(ptr);
     forward_bit_address(ptr); /* Send address for writing to LCD. */
     
     /* Send units. */
-    memcpy(buffer, UNITS, 16);
+    memcpy(buffer, UNITS, sizeof(UNITS));
     write_usart(ptr);
     forward_bit_address(ptr);
 }
@@ -42,11 +40,11 @@ void calibration(uint8_t mode)
     switch(mode)
     {
         case 0:
-            memcpy(buffer, CALIBRATION_LOW, 16);
+            memcpy(buffer, CALIBRATION_LOW, sizeof(CALIBRATION_LOW));
             forward_bit_address(ptr);
             break;
         case 1:
-            memcpy(buffer, CALIBRATION_HIGH, 16);
+            memcpy(buffer, CALIBRATION_HIGH, sizeof(CALIBRATION_LOW));
             forward_bit_address(ptr);
             break;
     }
