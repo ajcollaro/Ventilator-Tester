@@ -4,10 +4,6 @@
 #define CALIBRATION_LOW " 0V Calibration"
 #define CALIBRATION_HIGH " 5V Calibration"
 
-/* Holds one line of text. */
-static char buffer[16];
-static uint8_t *ptr = buffer;
-
 void write_usart(uint8_t *ptr)
 {
     while(!(*ptr == '\0'))
@@ -17,13 +13,17 @@ void write_usart(uint8_t *ptr)
     }
 }
 
-void report_data(struct sensor_t *sensor, struct dac_t *dac, struct usart_t *serial, struct i2c_t *i2c)
+void report_data(struct sensor *f1031v, struct dac *mcp4725, struct usart *serial, struct i2c *bus)
 {
+    /* Holds one line of text. */
+    char buffer[16];
+    uint8_t *ptr = &buffer;
+
     /* Blank LCD (slow). */
     lcd_tx_cmd(0x01);
 
     /* Convert flow to string. */
-    itoa((uint16_t)sensor->flow, buffer, 10);
+    itoa((uint16_t)f1031v->flow, buffer, 10);
     write_usart(ptr);
     forward_bit_address(ptr); /* Send address for writing to LCD. */
     
@@ -35,6 +35,10 @@ void report_data(struct sensor_t *sensor, struct dac_t *dac, struct usart_t *ser
 
 void calibration(uint8_t mode)
 {
+    /* Holds one line of text. */
+    char buffer[16];
+    uint8_t *ptr = &buffer;
+
     lcd_tx_cmd(0x01);
     
     switch(mode)

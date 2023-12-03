@@ -13,30 +13,30 @@ int main(void)
     i2c_init();
     lcd_init();
 
-    struct i2c_t i2c, *i2c_ptr = &i2c;
-    struct usart_t serial, *serial_ptr = &serial;
-    struct dac_t mcp4725, *dac = &mcp4725;
-    struct sensor_t f1031v, *sensor = &f1031v;
+    struct i2c i2c, *bus = &i2c;
+    struct usart usart, *serial = &usart;
+    struct dac dac, *mcp4725 = &dac;
+    struct sensor sensor, *f1031v = &sensor;
 
     /* Open serial connection at 9600 baud. */
-    serial_ptr->baud = 9600;
-    usart_init(serial_ptr);
+    serial->baud = 9600;
+    usart_init(serial);
 
     /* Send calibration signal. */
-    calibrate(dac, i2c_ptr);
+    calibrate(mcp4725, bus);
 
     while(1) 
     {
         /* Sample flow sensor and send updated data to DAC. */
-        sample_f1031v(sensor);
-        mcp4725_update(sensor, dac, i2c_ptr);
+        sample_f1031v(f1031v);
+        mcp4725_update(f1031v, mcp4725, bus);
 
         /* Update LCD at lower tick (else DAC performance is effected). */
         cycle++;
 
         if (cycle == REPORT_WAITS)
         {
-            report_data(sensor, dac, serial_ptr, i2c_ptr);
+            report_data(f1031v, mcp4725, serial, bus);
             cycle = 0;
         }  
     }

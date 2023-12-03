@@ -4,7 +4,7 @@
 #define F1031V_INTERCEPT -18.036
 #define F1031V_OFFSET 90
 
-void sample_f1031v(struct sensor_t *f1031v)
+void sample_f1031v(struct sensor *f1031v)
 {
     /* Initiate conversion. */
     ADCSRA |= (1 << ADSC);
