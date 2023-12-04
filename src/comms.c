@@ -13,7 +13,7 @@ void write_usart(uint8_t *ptr)
     }
 }
 
-void report_data(struct sensor *f1031v, struct dac *mcp4725, struct usart *serial, struct i2c *bus)
+void report_data(struct sensor *f1031v, struct dac *mcp4725, struct usart *serial)
 {
     /* Holds one line of text. */
     char buffer[16];

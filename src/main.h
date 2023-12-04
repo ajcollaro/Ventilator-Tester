@@ -24,8 +24,6 @@ struct sensor {
 
 void adc_init(void);
 
-void report_debug(struct sensor *, struct dac *, struct sensor *, struct i2c *);
-
 void sample_f1031v(struct sensor *);
 
 void mcp4725_update(struct sensor *, struct dac *, struct i2c *);
@@ -46,7 +44,7 @@ void usart_tx(struct usart *);
 void usart_init(struct usart *);
 
 void write_usart(uint8_t *);
-void report_data(struct sensor *, struct dac *, struct usart *, struct i2c *);
+void report_data(struct sensor *, struct dac *, struct usart *);
 void calibration(struct dac *, struct i2c *);
 
 #endif

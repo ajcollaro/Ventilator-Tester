@@ -35,7 +35,7 @@ int main(void)
         cycle++;
 
         if (cycle == 255)
-            report_data(f1031v, mcp4725, serial, bus);
+            report_data(f1031v, mcp4725, serial);
     }
 
     return 0;

@@ -11,7 +11,7 @@ void mcp4725_tx(struct dac *mcp4725, struct i2c *bus)
     /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
     i2c_tx_start();
 
-    bus->byte = 0xC2;
+    bus->byte = 0x63 << 1;
     i2c_tx(bus); /* Send SLA+W. */
 
     bus->byte = 0x40;
