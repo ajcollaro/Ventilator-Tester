@@ -33,7 +33,7 @@ void report_data(struct sensor *f1031v, struct dac *mcp4725, struct usart *seria
     forward_bit_address(ptr);
 }
 
-void calibration(uint8_t mode)
+void calibration(struct dac *mcp4725, struct i2c *bus)
 {
     /* Holds one line of text. */
     char buffer[16];
@@ -41,15 +41,23 @@ void calibration(uint8_t mode)
 
     lcd_tx_cmd(0x01);
     
-    switch(mode)
-    {
-        case 0:
-            memcpy(buffer, CALIBRATION_LOW, sizeof(CALIBRATION_LOW));
-            forward_bit_address(ptr);
-            break;
-        case 1:
-            memcpy(buffer, CALIBRATION_HIGH, sizeof(CALIBRATION_LOW));
-            forward_bit_address(ptr);
-            break;
-    }
+    /* Update LCD and send 5V via DAC. */
+    memcpy(buffer, CALIBRATION_HIGH, sizeof(CALIBRATION_HIGH));
+    forward_bit_address(ptr);
+    mcp4725->byte_high = 0xFF, mcp4725->byte_low = 0xFF;
+    mcp4725_tx(mcp4725, bus);
+
+    /* Wait 10 sec. */
+    _delay_ms(10000);
+
+    lcd_tx_cmd(0x01);
+
+    /* Update LCD and send 0V via DAC. */
+    memcpy(buffer, CALIBRATION_LOW, sizeof(CALIBRATION_LOW));
+    forward_bit_address(ptr);
+    mcp4725->byte_high = 0x00, mcp4725->byte_low = 0x00;
+    mcp4725_tx(mcp4725, bus);
+
+    /* Wait 10 sec. */
+    _delay_ms(10000);
 }

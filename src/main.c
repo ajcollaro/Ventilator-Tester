@@ -2,7 +2,7 @@
 
 int main(void)
 {
-    uint8_t cycle;
+    static uint8_t cycle;
 
     /* Turn on cooling fan. */
     DDRA = 0xFF;
@@ -23,7 +23,7 @@ int main(void)
     usart_init(serial);
 
     /* Send calibration signal. */
-    calibrate(mcp4725, bus);
+    calibration(mcp4725, bus);
 
     while(1) 
     {
@@ -34,11 +34,8 @@ int main(void)
         /* Update LCD at lower tick (else DAC performance is effected). */
         cycle++;
 
-        if (cycle == REPORT_WAITS)
-        {
+        if (cycle == 255)
             report_data(f1031v, mcp4725, serial, bus);
-            cycle = 0;
-        }  
     }
 
     return 0;

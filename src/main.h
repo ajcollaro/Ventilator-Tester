@@ -4,9 +4,6 @@
 #include "avr.h"
 #include <string.h>
 
-#define BAUD_RATE 9600
-#define REPORT_WAITS 255 /* LCD and USART waits before refresh. */
-
 struct dac {
     uint8_t byte_high, byte_low;
     uint16_t value;
@@ -22,12 +19,10 @@ struct i2c {
 };
 
 struct sensor {
-    float flow, processed;
+    float flow;
 };
 
 void adc_init(void);
-
-void calibrate(struct dac *, struct i2c *);
 
 void report_debug(struct sensor *, struct dac *, struct sensor *, struct i2c *);
 
@@ -52,6 +47,6 @@ void usart_init(struct usart *);
 
 void write_usart(uint8_t *);
 void report_data(struct sensor *, struct dac *, struct usart *, struct i2c *);
-void calibration(uint8_t mode);
+void calibration(struct dac *, struct i2c *);
 
 #endif

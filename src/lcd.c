@@ -88,7 +88,7 @@ void lcd_tx_cmd(uint8_t byte)
 
 void lcd_init(void)
 {
-    /* Set data pins. */
+    /* Set data direction. */
     DDRC = 0xFF;
     DDRD = 0xFF;
     DDRL = 0xFF;
