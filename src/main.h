@@ -25,7 +25,14 @@ struct sensor {
     float flow;
 };
 
+struct cal {
+    char buffer[16];
+    uint16_t size;
+};
+
 void adc_init(void);
+
+void calibrate(union dac *, struct i2c *, struct cal *);
 
 void sample_f1031v(struct sensor *);
 

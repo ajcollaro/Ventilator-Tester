@@ -1,5 +1,8 @@
 #include "main.h"
 
+#define CAL_5V " 5V Calibration"
+#define CAL_0V " 0V Calibration"
+
 int main(void)
 {
     static uint16_t cycle;
@@ -17,13 +20,20 @@ int main(void)
     struct usart usart, *serial = &usart;
     struct i2c i2c, *bus = &i2c;
     struct sensor sensor, *f1031v = &sensor;
+    struct cal cal, *setting = &cal;
 
     /* Open serial connection at 9600 baud. */
     serial->baud = 9600;
     usart_init(serial);
 
     /* Send calibration signal. */
-    calibration(mcp4725, bus);
+    memcpy(setting->buffer, CAL_5V, sizeof(CAL_5V));
+    setting->size = 0xFFFF;
+    calibrate(mcp4725, bus, setting);
+
+    memcpy(setting->buffer, CAL_0V, sizeof(CAL_0V));
+    setting->size = 0x0000;
+    calibrate(mcp4725, bus, setting);
 
     while(1) 
     {
