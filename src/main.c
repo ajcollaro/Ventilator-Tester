@@ -2,7 +2,7 @@
 
 int main(void)
 {
-    static uint8_t cycle;
+    static uint16_t cycle;
 
     /* Turn on cooling fan. */
     DDRA = 0xFF;
@@ -13,9 +13,9 @@ int main(void)
     i2c_init();
     lcd_init();
 
-    struct i2c i2c, *bus = &i2c;
+    union dac dac, *mcp4725 = &dac;
     struct usart usart, *serial = &usart;
-    struct dac dac, *mcp4725 = &dac;
+    struct i2c i2c, *bus = &i2c;
     struct sensor sensor, *f1031v = &sensor;
 
     /* Open serial connection at 9600 baud. */
@@ -31,11 +31,14 @@ int main(void)
         sample_f1031v(f1031v);
         mcp4725_update(f1031v, mcp4725, bus);
 
-        /* Update LCD at lower tick (else DAC performance is effected). */
+        /* Update LCD at lower tick (else worse aliasing of analog signal). */
         cycle++;
 
-        if (cycle == 255)
+        if (cycle == 5000)
+        {
             report_data(f1031v, mcp4725, serial);
+            cycle = 0;
+        }
     }
 
     return 0;

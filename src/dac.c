@@ -6,16 +6,17 @@
    0xC2 works in Proteus sim.
 */
 
-void mcp4725_tx(struct dac *mcp4725, struct i2c *bus)
+void mcp4725_tx(union dac *mcp4725, struct i2c *bus)
 {
     /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
     i2c_tx_start();
 
-    bus->byte = 0x63 << 1;
-    i2c_tx(bus); /* Send SLA+W. */
+    //bus->byte = 0x63 << 1;
+    bus->byte = 0xC2;
+    i2c_tx(bus); /* SLA+W. */
 
     bus->byte = 0x40;
-    i2c_tx(bus); /* Send CO. */
+    i2c_tx(bus); /* CO. */
 
     bus->byte = mcp4725->byte_high;
     i2c_tx(bus);
@@ -27,18 +28,11 @@ void mcp4725_tx(struct dac *mcp4725, struct i2c *bus)
     i2c_tx_stop();
 }
 
-void mcp4725_update(struct sensor *f1031v, struct dac *mcp4725, struct i2c *bus)
+void mcp4725_update(struct sensor *f1031v, union dac *mcp4725, struct i2c *bus)
 {
-    /* Scale value so to output a maximum of ~4.8V,
-     * and a minimum of 0.25V to avoid integer underflow during EPAP.
-     */
-    static const uint8_t offset = 90;
-    mcp4725->value = (f1031v->flow + offset) * 3;
+    /* Scale value to avoid integer underflow during EPAP. */
+    static const uint8_t offset = 50;
+    mcp4725->value = f1031v->flow + offset;
 
-    /* Split high and low bytes. */
-    mcp4725->byte_high = (uint8_t)(mcp4725->value >> 4);
-    mcp4725->byte_low = (uint8_t)(mcp4725->value & 0xFF);
-
-    /* Send. */
     mcp4725_tx(mcp4725, bus);
 }

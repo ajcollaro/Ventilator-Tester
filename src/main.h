@@ -4,8 +4,11 @@
 #include "avr.h"
 #include <string.h>
 
-struct dac {
-    uint8_t byte_high, byte_low;
+union dac {
+    struct {
+        uint8_t byte_high;
+        uint8_t byte_low;
+    };
     uint16_t value;
 };
 
@@ -15,7 +18,7 @@ struct usart {
 };
 
 struct i2c {
-    uint8_t status, byte;
+    uint8_t byte;
 };
 
 struct sensor {
@@ -26,9 +29,9 @@ void adc_init(void);
 
 void sample_f1031v(struct sensor *);
 
-void mcp4725_update(struct sensor *, struct dac *, struct i2c *);
-void mcp4725_tx(struct dac *, struct i2c *);
-void mcp4725_bypass(struct dac *);
+void mcp4725_update(struct sensor *, union dac *, struct i2c *);
+void mcp4725_tx(union dac *, struct i2c *);
+void mcp4725_bypass(union dac *);
 
 void i2c_tx(struct i2c *);
 void i2c_tx_stop(void);
@@ -44,7 +47,7 @@ void usart_tx(struct usart *);
 void usart_init(struct usart *);
 
 void write_usart(uint8_t *);
-void report_data(struct sensor *, struct dac *, struct usart *);
-void calibration(struct dac *, struct i2c *);
+void report_data(struct sensor *, union dac *, struct usart *);
+void calibration(union dac *, struct i2c *);
 
 #endif
