@@ -6,7 +6,7 @@
    0xC2 works in Proteus sim.
 */
 
-void mcp4725_tx(union dac *mcp4725, struct i2c *bus)
+void mcp4725_tx(dac_t *mcp4725, i2c_t *bus)
 {
     /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
     i2c_tx_start();
@@ -27,7 +27,7 @@ void mcp4725_tx(union dac *mcp4725, struct i2c *bus)
     i2c_tx_stop();
 }
 
-void mcp4725_update(struct sensor *f1031v, union dac *mcp4725, struct i2c *bus)
+void mcp4725_update(sensor_t *f1031v, dac_t *mcp4725, i2c_t *bus)
 {
     /* Scale value to avoid integer underflow during EPAP. */
     static const uint8_t offset = 50;

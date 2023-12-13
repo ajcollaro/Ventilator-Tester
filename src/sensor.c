@@ -1,6 +1,6 @@
 #include "main.h"
 
-void sample_f1031v(struct sensor *f1031v)
+void sample_f1031v(sensor_t *f1031v)
 {
     static const float slope = 36.463;
     static const float intercept = -18.036;
@@ -8,7 +8,6 @@ void sample_f1031v(struct sensor *f1031v)
     /* Initiate conversion. */
     ADCSRA |= (1 << ADSC);
 
-    /* Wait for conversion. */
     while((ADCSRA & (1 << ADSC)));
 
     /* Get value from register and convert to flow. */

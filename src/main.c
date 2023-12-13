@@ -7,20 +7,18 @@ int main(void)
 {
     static uint16_t cycle;
 
-    /* Turn on cooling fan. */
     DDRA = 0xFF;
     PORTA |= (1 << PORTA7);
 
-    /* Bring up features. */
     adc_init();
     i2c_init();
     lcd_init();
 
-    union dac dac, *mcp4725 = &dac;
-    struct usart usart, *serial = &usart;
-    struct i2c i2c, *bus = &i2c;
-    struct sensor sensor, *f1031v = &sensor;
-    struct cal cal, *setting = &cal;
+    dac_t dac, *mcp4725 = &dac;
+    usart_t usart, *serial = &usart;
+    i2c_t i2c, *bus = &i2c;
+    sensor_t sensor, *f1031v = &sensor;
+    cal_t cal, *setting = &cal;
 
     /* Open serial connection at 9600 baud. */
     serial->baud = 9600;
@@ -43,7 +41,7 @@ int main(void)
 
         /* Update LCD at lower tick (else worse aliasing of analog signal). */
         cycle++;
-
+        
         if (cycle == 5000)
         {
             report_data(f1031v, mcp4725, serial);

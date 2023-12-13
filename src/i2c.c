@@ -1,6 +1,6 @@
 #include "main.h"
 
-void i2c_tx(struct i2c *bus)
+void i2c_tx(i2c_t *bus)
 {
     /* Send byte of data to slave device. */
     TWDR = bus->byte;

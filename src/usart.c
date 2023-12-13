@@ -1,6 +1,6 @@
 #include "main.h"
 
-void usart_tx(struct usart *serial)
+void usart_tx(usart_t *serial)
 {
     UDR0 = serial->byte;
 
@@ -8,7 +8,7 @@ void usart_tx(struct usart *serial)
     while(!(UCSR0A & (1 << UDRE0)));
 }
 
-void usart_init(struct usart *serial)
+void usart_init(usart_t *serial)
 {
     /* Enable Tx and Rx, and Rx ISRs. */
     serial->prescale = (F_CPU / 16 / serial->baud) - 1;

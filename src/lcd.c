@@ -14,25 +14,10 @@
 static void write_nibble(uint8_t byte)
 {
     /* Test most significant 4-bits and set each pin. */
-    if(byte & 0x10)
-        LCD_DATA_PORT1 |=  (1 << LCD_DATA_PIN1);
-    else
-        LCD_DATA_PORT1 &= ~(1 << LCD_DATA_PIN1);
-
-    if(byte & 0x20)
-        LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN2);
-    else
-        LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN2);
-
-    if(byte & 0x40)
-        LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN3);
-    else
-        LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN3);
-
-    if(byte & 0x80)
-        LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN4);
-    else
-        LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN4);
+    (byte & 0x10) ? (LCD_DATA_PORT1 |=  (1 << LCD_DATA_PIN1)) : (LCD_DATA_PORT1 &= ~(1 << LCD_DATA_PIN1));
+    (byte & 0x20) ? (LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN2)) : (LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN2));
+    (byte & 0x40) ? (LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN3)) : (LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN3));
+    (byte & 0x80) ? (LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN4)) : (LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN4));
 }
 
 void forward_bit_address(uint8_t *byte)

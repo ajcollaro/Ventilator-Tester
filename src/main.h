@@ -1,46 +1,45 @@
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#pragma once
 
 #include "avr.h"
 #include <string.h>
 
-union dac {
+typedef union {
     struct {
         uint8_t byte_high;
         uint8_t byte_low;
     };
     uint16_t value;
-};
+} dac_t;
 
-struct usart {
+typedef struct {
     uint8_t byte;
     uint16_t baud, prescale;
-};
+} usart_t;
 
-struct i2c {
+typedef struct {
     uint8_t byte;
-};
+} i2c_t;
 
-struct sensor {
+typedef struct {
     float flow;
-};
+} sensor_t;
 
-struct cal {
+typedef struct {
     char buffer[16];
     uint16_t size;
-};
+} cal_t;
 
 void adc_init(void);
 
-void calibrate(union dac *, struct i2c *, struct cal *);
+void calibrate(dac_t *, i2c_t *, cal_t *);
 
-void sample_f1031v(struct sensor *);
+void sample_f1031v(sensor_t *);
 
-void mcp4725_update(struct sensor *, union dac *, struct i2c *);
-void mcp4725_tx(union dac *, struct i2c *);
-void mcp4725_bypass(union dac *);
+void mcp4725_update(sensor_t *, dac_t *, i2c_t *);
+void mcp4725_tx(dac_t *, i2c_t *);
+void mcp4725_bypass(dac_t *);
 
-void i2c_tx(struct i2c *);
+void i2c_tx(i2c_t *);
 void i2c_tx_stop(void);
 void i2c_tx_start(void);
 void i2c_init(void);
@@ -50,11 +49,9 @@ void lcd_tx_data(uint8_t byte);
 void lcd_tx_cmd(uint8_t byte);
 void lcd_init(void);
 
-void usart_tx(struct usart *);
-void usart_init(struct usart *);
+void usart_tx(usart_t *);
+void usart_init(usart_t *);
 
 void write_usart(uint8_t *);
-void report_data(struct sensor *, union dac *, struct usart *);
-void calibration(union dac *, struct i2c *);
-
-#endif
+void report_data(sensor_t *, dac_t *, usart_t *);
+void calibration(dac_t *, i2c_t *);

@@ -1,6 +1,6 @@
 #include "main.h"
 
-void calibrate(union dac *mcp4725, struct i2c *bus, struct cal *setting)
+void calibrate(dac_t *mcp4725, i2c_t *bus, cal_t *setting)
 {
     uint8_t *ptr = &setting->buffer;
 
