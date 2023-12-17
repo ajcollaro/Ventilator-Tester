@@ -28,13 +28,10 @@ ISR(ADC_vect)
 
 int main(void)
 {
-    //DDRA = 0xFF;
     asm("ldi %0, %2 \n"
         "ldi %1, %3 \n"
         : "=r" (DDRA), "=r" (PORTA) : "M" (0xFF), "M" (0x80)
     );
-
-    //PORTA |= (1 << PORTA7);
 
     adc_init();
     i2c_init();
