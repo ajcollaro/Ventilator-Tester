@@ -32,7 +32,7 @@ int main(void)
         "ldi %1, %3 \n"
         : "=r" (DDRA), "=r" (PORTA) : "M" (0xFF), "M" (0x80)
     );
-
+    
     adc_init();
     i2c_init();
     lcd_init();

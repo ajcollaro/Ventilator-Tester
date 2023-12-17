@@ -6,6 +6,8 @@ void adc_init(void)
      * ADC operating in 10-bit mode with pre-scalar at 128 (125KHz).
      * Interrupts enabled.
      */
-    ADMUX |= (1 << REFS0); /* AVCC, single ended input into AD0 pin. */
-    ADCSRA |= (1 << ADPS0)|(1 << ADPS1)|(1 << ADPS2)|(1 << ADEN)|(1 << ADIE);
+    asm("ldi %0, %2 \n"
+        "ldi %1, %3 \n"
+        : "=r" (ADMUX), "=r" (ADCSRA) : "M" (0x40), "M" (0x8F)
+    );
 }
