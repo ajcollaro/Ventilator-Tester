@@ -9,10 +9,10 @@ enum MAGIC_NUMBERS {
     LCD_REFRESH_CYCLES = 255
 };
 
-static volatile uint8_t cycle;
-static volatile dac_t dac, *mcp4725 = &dac;
+static uint8_t cycle;
+static dac_t dac, *mcp4725 = &dac;
 static i2c_t i2c, *bus = &bus;
-static volatile sensor_t sensor, *f1031v = &sensor;
+static sensor_t sensor, *f1031v = &sensor;
 
 ISR(ADC_vect)
 {
@@ -53,9 +53,9 @@ int main(void)
     while(1) 
     {
         SMCR |= (1 << SE);
-        asm volatile("sleep");
+        asm("sleep");
     }
 
     /* If we somehow get here, jump to start. */
-    asm volatile("jmp 0");
+    asm("jmp 0");
 }
