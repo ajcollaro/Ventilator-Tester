@@ -11,6 +11,12 @@
 #define LCD_DATA_PIN3       PORTC3
 #define LCD_DATA_PIN4       PORTC5
 
+enum LCD1602_MAGIC_NUMBERS {
+    LCD_CLEARDISPLAY = 0x01,
+    LCD_INIT4BIT = 0x02,
+    LCD_DISPLAYONCURSOROFF = 0x0C
+};
+
 static void write_nibble(uint8_t byte)
 {
     /* Test most significant 4-bits and set each pin. */
@@ -22,11 +28,10 @@ static void write_nibble(uint8_t byte)
 
 void forward_bit_address(uint8_t *byte)
 {
-    /* Forward address of each bit to the LCD. */
     while((*byte)!='\0')
     {
         lcd_tx_data(*byte);
-        byte++; /* Next byte. */
+        byte++;
     }
 } 
 
@@ -40,7 +45,7 @@ void lcd_tx_data(uint8_t byte)
     LCD_CONTROL_PORT &= ~(1 << LCD_EN_PIN);
     _delay_us(2);
 
-    byte <<= 4; /* Shift LSBs to MSBs. */
+    byte <<= 4;
 
     write_nibble(byte);
 
@@ -61,7 +66,7 @@ void lcd_tx_cmd(uint8_t byte)
     LCD_CONTROL_PORT &= ~(1 << LCD_EN_PIN);
     _delay_ms(1);
 
-    byte <<= 4;  /* Shift LSBs to MSBs. */
+    byte <<= 4;
 
     write_nibble(byte);
     
@@ -71,6 +76,11 @@ void lcd_tx_cmd(uint8_t byte)
     _delay_ms(2);
 }
 
+void lcd_blank(void)
+{
+    lcd_tx_cmd(LCD_CLEARDISPLAY);
+}
+
 void lcd_init(void)
 {
     /* Set data direction. */
@@ -78,11 +88,10 @@ void lcd_init(void)
     DDRD = 0xFF;
     DDRL = 0xFF;
 
-    _delay_ms(1000);
+    _delay_ms(15);
     
-    /* Enable 4-bit mode with 2-lines. */
-    lcd_tx_cmd(0x02);
-    lcd_tx_cmd(0x28);
-    lcd_tx_cmd(0x0C);
-    lcd_tx_cmd(0x01);
+    /* 4-bit mode, 1-line */
+    lcd_tx_cmd(LCD_INIT4BIT);
+    lcd_tx_cmd(LCD_DISPLAYONCURSOROFF);
+    lcd_tx_cmd(LCD_CLEARDISPLAY);
 }

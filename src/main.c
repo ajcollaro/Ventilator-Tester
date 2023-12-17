@@ -3,6 +3,12 @@
 #define CAL_5V " 5V Calibration"
 #define CAL_0V " 0V Calibration"
 
+enum MAGIC_NUMBERS {
+    OUT_5V = 0xFFFF,
+    OUT_0V = 0x0000,
+    LCD_REFRESH_CYCLES = 5000
+};
+
 int main(void)
 {
     static uint16_t cycle;
@@ -26,11 +32,11 @@ int main(void)
 
     /* Send calibration signal. */
     memcpy(setting->buffer, CAL_5V, sizeof(CAL_5V));
-    setting->size = 0xFFFF;
+    setting->size = OUT_5V;
     calibrate(mcp4725, bus, setting);
 
     memcpy(setting->buffer, CAL_0V, sizeof(CAL_0V));
-    setting->size = 0x0000;
+    setting->size = OUT_0V;
     calibrate(mcp4725, bus, setting);
 
     while(1) 
@@ -42,12 +48,13 @@ int main(void)
         /* Update LCD at lower tick (else worse aliasing of analog signal). */
         cycle++;
         
-        if (cycle == 5000)
+        if (cycle == LCD_REFRESH_CYCLES)
         {
             report_data(f1031v, mcp4725, serial);
             cycle = 0;
         }
     }
 
-    return 0;
+    /* If we somehow get here, jump to start. */
+    asm volatile("jmp 0");
 }

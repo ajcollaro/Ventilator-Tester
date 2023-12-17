@@ -13,17 +13,15 @@ void write_usart(uint8_t *ptr)
 
 void report_data(sensor_t *f1031v, dac_t *mcp4725, usart_t *serial)
 {
-    /* Holds one line of text. */
     char buffer[16];
     uint8_t *ptr = &buffer;
 
-    /* Blank LCD (slow). */
-    lcd_tx_cmd(0x01);
+    lcd_blank();
 
     /* Convert flow to string. */
     itoa((uint16_t)f1031v->flow, buffer, 10);
     write_usart(ptr);
-    forward_bit_address(ptr); /* Send address for writing to LCD. */
+    forward_bit_address(ptr);
     
     /* Send units. */
     memcpy(buffer, UNITS, sizeof(UNITS));

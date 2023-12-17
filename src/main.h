@@ -45,8 +45,9 @@ void i2c_tx_start(void);
 void i2c_init(void);
 
 void forward_bit_address(uint8_t *);
-void lcd_tx_data(uint8_t byte);
-void lcd_tx_cmd(uint8_t byte);
+void lcd_tx_data(uint8_t);
+void lcd_tx_cmd(uint8_t);
+void lcd_blank(void);
 void lcd_init(void);
 
 void usart_tx(usart_t *);
