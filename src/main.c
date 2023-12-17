@@ -6,13 +6,27 @@
 enum MAGIC_NUMBERS {
     OUT_5V = 0xFFFF,
     OUT_0V = 0x0000,
-    LCD_REFRESH_CYCLES = 5000
+    LCD_REFRESH_CYCLES = 255
 };
+
+static volatile uint8_t cycle;
+static volatile dac_t dac, *mcp4725 = &dac;
+static i2c_t i2c, *bus = &bus;
+static volatile sensor_t sensor, *f1031v = &sensor;
+
+ISR(ADC_vect)
+{
+    cycle++;
+
+    /* Sample flow sensor and send updated data to DAC. */
+    sample_f1031v(f1031v);
+    mcp4725_update(f1031v, mcp4725, bus);
+
+    (cycle == LCD_REFRESH_CYCLES) ? report_data(f1031v, mcp4725) : 0;
+}
 
 int main(void)
 {
-    static uint16_t cycle;
-
     DDRA = 0xFF;
     PORTA |= (1 << PORTA7);
 
@@ -20,15 +34,7 @@ int main(void)
     i2c_init();
     lcd_init();
 
-    dac_t dac, *mcp4725 = &dac;
-    usart_t usart, *serial = &usart;
-    i2c_t i2c, *bus = &i2c;
-    sensor_t sensor, *f1031v = &sensor;
     cal_t cal, *setting = &cal;
-
-    /* Open serial connection at 9600 baud. */
-    serial->baud = 9600;
-    usart_init(serial);
 
     /* Send calibration signal. */
     memcpy(setting->buffer, CAL_5V, sizeof(CAL_5V));
@@ -39,20 +45,15 @@ int main(void)
     setting->size = OUT_0V;
     calibrate(mcp4725, bus, setting);
 
+    /* Configure ADC noise reduction during sleep. */
+    SMCR |= (1 << SM0);
+
+    sei();
+
     while(1) 
     {
-        /* Sample flow sensor and send updated data to DAC. */
-        sample_f1031v(f1031v);
-        mcp4725_update(f1031v, mcp4725, bus);
-
-        /* Update LCD at lower tick (else worse aliasing of analog signal). */
-        cycle++;
-        
-        if (cycle == LCD_REFRESH_CYCLES)
-        {
-            report_data(f1031v, mcp4725, serial);
-            cycle = 0;
-        }
+        SMCR |= (1 << SE);
+        asm volatile("sleep");
     }
 
     /* If we somehow get here, jump to start. */

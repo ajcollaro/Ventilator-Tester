@@ -11,7 +11,7 @@ void write_usart(uint8_t *ptr)
     }
 }
 
-void report_data(sensor_t *f1031v, dac_t *mcp4725, usart_t *serial)
+void report_data(sensor_t *f1031v, dac_t *mcp4725)
 {
     char buffer[16];
     uint8_t *ptr = &buffer;
@@ -20,11 +20,9 @@ void report_data(sensor_t *f1031v, dac_t *mcp4725, usart_t *serial)
 
     /* Convert flow to string. */
     itoa((uint16_t)f1031v->flow, buffer, 10);
-    write_usart(ptr);
     forward_bit_address(ptr);
     
     /* Send units. */
     memcpy(buffer, UNITS, sizeof(UNITS));
-    write_usart(ptr);
     forward_bit_address(ptr);
 }
