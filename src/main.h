@@ -1,6 +1,7 @@
 #pragma once
 
 #include "avr.h"
+#include <avr/interrupt.h>
 #include <string.h>
 
 typedef union {
@@ -54,5 +55,5 @@ void usart_tx(usart_t *);
 void usart_init(usart_t *);
 
 void write_usart(uint8_t *);
-void report_data(sensor_t *, dac_t *, usart_t *);
+void report_data(sensor_t *, dac_t *);
 void calibration(dac_t *, i2c_t *);

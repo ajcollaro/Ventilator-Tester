@@ -4,7 +4,7 @@ void calibrate(dac_t *mcp4725, i2c_t *bus, cal_t *setting)
 {
     uint8_t *ptr = &setting->buffer;
 
-    lcd_tx_cmd(0x01);
+    lcd_blank();
 
     forward_bit_address(ptr);
 
