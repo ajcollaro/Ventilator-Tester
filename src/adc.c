@@ -6,8 +6,8 @@ void adc_init(void)
      * ADC operating in 10-bit mode with pre-scalar at 128 (125KHz).
      * Interrupts enabled.
      */
-    asm("ldi %0, %2 \n"
-        "ldi %1, %3 \n"
+    asm("ldi %0, %2 \n\t"
+        "ldi %1, %3 \n\t"
         : "=r" (ADMUX), "=r" (ADCSRA) : "M" (0x40), "M" (0x8F)
     );
 }

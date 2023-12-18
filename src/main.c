@@ -7,7 +7,7 @@ enum MAGIC_NUMBERS {
     OUT_5V = 0xFFFF,
     OUT_0V = 0x0000,
     LCD_REFRESH_CYCLES = 255,
-    SLEEP_REGISTER_SETTING = 0x03
+    NOISE_REDUCTION_MODE = 0x03
 };
 
 static uint8_t cycle;
@@ -28,8 +28,8 @@ ISR(ADC_vect)
 
 int main(void)
 {
-    asm("ldi %0, %2 \n"
-        "ldi %1, %3 \n"
+    asm("ldi %0, %2 \n\t"
+        "ldi %1, %3 \n\t"
         : "=r" (DDRA), "=r" (PORTA) : "M" (0xFF), "M" (0x80)
     );
     
@@ -48,16 +48,16 @@ int main(void)
     setting->size = OUT_0V;
     calibrate(mcp4725, bus, setting);
 
-    asm("sei \n");
+    asm("sei \n\t");
 
-    asm("ldi %0, %1 \n"
-            : "=r" (SMCR) : "M" (SLEEP_REGISTER_SETTING)
-        );
+    asm("ldi %0, %1 \n\t"
+            : "=r" (SMCR) : "M" (NOISE_REDUCTION_MODE)
+    );
 
     while(1) 
     {       
-        asm("sleep \n");
+        asm("sleep \n\t");
     }
     
-    asm("jmp 0");
+    asm("jmp 0 \n\t");
 }
