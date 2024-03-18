@@ -84,11 +84,9 @@ void lcd_blank(void)
 void lcd_init(void)
 {
     /* Set data direction. */
-    asm("ldi %0, %3 \n"
-        "ldi %1, %4 \n"
-        "ldi %2, %5 \n"
-        : "=r" (DDRC), "=r" (DDRD), "=r" (DDRL) : "M" (0xFF), "M" (0xFF), "M" (0xFF)
-    );
+    DDRC = 0xFF;
+    DDRD = 0xFF;
+    DDRL = 0xFF;
 
     _delay_ms(15);
     
