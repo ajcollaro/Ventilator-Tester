@@ -28,10 +28,8 @@ ISR(ADC_vect)
 
 int main(void)
 {
-    asm("ldi %0, %2 \n\t"
-        "ldi %1, %3 \n\t"
-        : "=r" (DDRA), "=r" (PORTA) : "M" (0xFF), "M" (0x80)
-    );
+    DDRA = 0xFF;
+    PORTA |= (1 << PORTA7);
     
     adc_init();
     i2c_init();
@@ -48,16 +46,12 @@ int main(void)
     setting->size = OUT_0V;
     calibrate(mcp4725, bus, setting);
 
-    asm("sei \n\t");
+    sei();
 
-    asm("ldi %0, %1 \n\t"
-            : "=r" (SMCR) : "M" (NOISE_REDUCTION_MODE)
-    );
+    SMCR |= (1 << SE);
 
     while(1) 
     {       
         asm("sleep \n\t");
     }
-    
-    asm("jmp 0 \n\t");
 }
