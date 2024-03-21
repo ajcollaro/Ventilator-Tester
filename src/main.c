@@ -10,24 +10,16 @@ enum MAGIC_NUMBERS {
     NOISE_REDUCTION_MODE = 0x03
 };
 
-static uint8_t cycle;
-static dac_t dac, *mcp4725 = &dac;
-static i2c_t i2c, *bus = &bus;
-static sensor_t sensor, *f1031v = &sensor;
+static volatile uint8_t cycle;
 
 ISR(ADC_vect)
 {
     cycle++;
-
-    /* Sample flow sensor and send updated data to DAC. */
-    sample_f1031v(f1031v);
-    mcp4725_update(f1031v, mcp4725, bus);
-
-    (cycle == LCD_REFRESH_CYCLES) ? report_data(f1031v, mcp4725) : 0;
 }
 
 int main(void)
 {
+    /* Bring up hardware. */
     DDRA = 0xFF;
     PORTA |= (1 << PORTA7);
     
@@ -35,6 +27,9 @@ int main(void)
     i2c_init();
     lcd_init();
 
+    dac_t dac, *mcp4725 = &dac;
+    i2c_t i2c, *bus = &bus;
+    sensor_t sensor, *f1031v = &sensor;
     cal_t cal, *setting = &cal;
 
     /* Send calibration signal. */
@@ -46,12 +41,22 @@ int main(void)
     setting->size = OUT_0V;
     calibrate(mcp4725, bus, setting);
 
+    /* Enable interrupts. */
     sei();
 
+    /* ADC noise reduction mode. */
     SMCR |= (1 << SE);
 
     while(1) 
     {       
+        /* Sample flow sensor and send updated data to DAC. */
+        sample_f1031v(f1031v);
+        mcp4725_update(f1031v, mcp4725, bus);
+
+        /* Update display at slower tic. */
+        (cycle == LCD_REFRESH_CYCLES) ? report_data(f1031v, mcp4725) : 0;
+
+        /* Sleep and begin conversion. */
         asm("sleep \n\t");
     }
 }
