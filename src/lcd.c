@@ -26,7 +26,7 @@ static void write_nibble(uint8_t byte)
     (byte & 0x80) ? (LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN4)) : (LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN4));
 }
 
-void forward_bit_address(uint8_t *byte)
+void lcd_write(uint8_t *byte)
 {
     while((*byte)!='\0')
     {

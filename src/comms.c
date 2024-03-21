@@ -20,9 +20,9 @@ void report_data(sensor_t *f1031v, dac_t *mcp4725)
 
     /* Convert flow to string. */
     itoa((uint16_t)f1031v->flow, buffer, 10);
-    forward_bit_address(ptr);
+    lcd_write(ptr);
     
     /* Send units. */
     memcpy(buffer, UNITS, sizeof(UNITS));
-    forward_bit_address(ptr);
+    lcd_write(ptr);
 }

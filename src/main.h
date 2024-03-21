@@ -6,8 +6,8 @@
 
 typedef union {
     struct {
-        uint8_t byte_high;
-        uint8_t byte_low;
+        uint8_t byte_hi;
+        uint8_t byte_lo;
     };
     uint16_t value;
 } dac_t;
@@ -45,7 +45,7 @@ void i2c_tx_stop(void);
 void i2c_tx_start(void);
 void i2c_init(void);
 
-void forward_bit_address(uint8_t *);
+void lcd_write(uint8_t *);
 void lcd_tx_data(uint8_t);
 void lcd_tx_cmd(uint8_t);
 void lcd_blank(void);
