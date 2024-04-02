@@ -15,16 +15,13 @@ enum MCP4725_MAGIC_NUMBERS {
 
 void mcp4725_tx(dac_t *mcp4725, i2c_t *bus)
 {
-    /* Start -> SLA+W -> CO -> MSBs -> LSBs = 5 bytes total. */
+    /* Start. */
     i2c_tx_start();
 
-    bus->byte = DEVICE_ADDRESS;
-    i2c_tx(bus);
-    bus->byte = CO;
-    i2c_tx(bus);
-    bus->byte = mcp4725->byte_hi;
-    i2c_tx(bus);
-    bus->byte = mcp4725->byte_lo;
+    /* SLA+W -> CO -> MSBs -> LSBs = 4 bytes total. */
+    uint8_t cmds[4] = {DEVICE_ADDRESS, CO, mcp4725->byte_hi, mcp4725->byte_lo};
+    memcpy(bus->bytes, cmds, sizeof(cmds));
+    
     i2c_tx(bus);
 
     /* Release SCK and SDA lines. */

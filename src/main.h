@@ -18,7 +18,7 @@ typedef struct {
 } usart_t;
 
 typedef struct {
-    uint8_t byte;
+    uint8_t bytes[4];
 } i2c_t;
 
 typedef struct {

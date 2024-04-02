@@ -1,12 +1,20 @@
 #include "main.h"
 
+enum BUS_SPEED {
+    SPEED_ONE = 0x48, /* 100KHz. */
+    SPEED_TWO = 0x0C /* 400KHz. */
+};
+
 void i2c_tx(i2c_t *bus)
 {
-    /* Send byte of data to slave device. */
-    TWDR = bus->byte;
-    TWCR = (1 << TWINT)|(1 << TWEN);
+    /* Send bytes of data to slave device. */
+    for(uint8_t i = 1; i < sizeof(bus->bytes); i++)
+    {
+        TWDR = bus->bytes[i];
+        TWCR = (1 << TWINT)|(1 << TWEN);
 
-    while(!(TWCR & (1 << TWINT)));
+        while(!(TWCR & (1 << TWINT)));
+    }
 }
 
 void i2c_tx_stop(void)
@@ -28,5 +36,5 @@ void i2c_tx_start(void)
 void i2c_init(void)
 {
     /* I2C using two-wire interface. */
-    TWBR = 0x0C; /* 0x48 for 100KHz, 0x0C for 400KHz */
+    TWBR = SPEED_TWO;
 }
