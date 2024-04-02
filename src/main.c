@@ -14,7 +14,8 @@ static volatile uint8_t cycle;
 
 ISR(ADC_vect)
 {
-    cycle++;
+    /* Re-enter loop to increment cycle counter.
+       Avoid static variable held in SRAM. */
 }
 
 int main(void)
@@ -22,7 +23,7 @@ int main(void)
     /* Bring up hardware. */
     DDRA = 0xFF;
     PORTA |= (1 << PORTA7);
-    
+
     adc_init();
     i2c_init();
     lcd_init();
@@ -47,8 +48,13 @@ int main(void)
     /* ADC noise reduction mode. */
     SMCR |= (1 << SE);
 
+    /* Cycle counter. */
+    uint8_t cycle = 0;
+
     while(1) 
     {       
+        cycle++;
+        
         /* Sample flow sensor and send updated data to DAC. */
         sample_f1031v(f1031v);
         mcp4725_update(f1031v, mcp4725, bus);

@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define UNITS " L/min (STP) "
+#define UNITS " L/min (STP)"
 
 void write_usart(uint8_t *ptr)
 {
