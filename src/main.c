@@ -10,8 +10,6 @@ enum MAGIC_NUMBERS {
     NOISE_REDUCTION_MODE = 0x03
 };
 
-static volatile uint8_t cycle;
-
 ISR(ADC_vect)
 {
     /* Re-enter loop to increment cycle counter.
