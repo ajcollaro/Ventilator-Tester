@@ -90,7 +90,7 @@ void lcd_init(void)
 
     _delay_ms(15);
     
-    /* 4-bit mode, 1-line */
+    /* 4-bit mode, 1-line. */
     lcd_tx_cmd(LCD_INIT4BIT);
     lcd_tx_cmd(LCD_DISPLAYONCURSOROFF);
     lcd_tx_cmd(LCD_CLEARDISPLAY);
