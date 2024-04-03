@@ -8,13 +8,13 @@ enum BUS_SPEED {
 void i2c_tx(i2c_t *bus)
 {
     /* Send bytes of data to slave device. */
-    for(uint8_t i = 1; i <= sizeof(bus->bytes); i++)
+    for(uint8_t i = 0; i <= 3; i++)
     {
         TWDR = bus->bytes[i];
         TWCR = (1 << TWINT)|(1 << TWEN);
 
         while(!(TWCR & (1 << TWINT)));
-    }
+    };
 }
 
 void i2c_tx_stop(void)

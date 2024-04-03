@@ -13,7 +13,7 @@ void write_usart(uint8_t *ptr)
 
 void report_data(sensor_t *f1031v, dac_t *mcp4725)
 {
-    char buffer[16];
+    char buffer[15];
     uint8_t *ptr = &buffer;
 
     lcd_blank();

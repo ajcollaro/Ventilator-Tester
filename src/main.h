@@ -17,8 +17,14 @@ typedef struct {
     uint16_t baud, prescale;
 } usart_t;
 
-typedef struct {
-    uint8_t bytes[4];
+typedef union {
+    struct {
+        uint8_t device;
+        uint8_t command;
+        uint8_t byte2;
+        uint8_t byte3;
+    };
+    uint8_t bytes[3];
 } i2c_t;
 
 typedef struct {
@@ -26,7 +32,7 @@ typedef struct {
 } sensor_t;
 
 typedef struct {
-    char buffer[16];
+    char buffer[15];
     uint16_t size;
 } cal_t;
 

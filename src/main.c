@@ -22,22 +22,22 @@ int main(void)
     PORTA |= (1 << PORTA7);
 
     adc_init();
-    i2c_init();
     lcd_init();
+    i2c_init();
 
-    dac_t dac, *mcp4725 = &dac;
-    i2c_t i2c, *bus = &bus;
-    sensor_t sensor, *f1031v = &sensor;
-    cal_t cal, *setting = &cal;
+    dac_t dac;
+    i2c_t i2c;
+    sensor_t sensor;
+    cal_t cal, *settings = &cal;
 
     /* Send calibration signal. */
-    memcpy(setting->buffer, CAL_5V, sizeof(CAL_5V));
-    setting->size = OUT_5V;
-    calibrate(mcp4725, bus, setting);
+    memcpy(settings->buffer, CAL_5V, sizeof(CAL_5V));
+    settings->size = OUT_5V;
+    calibrate(settings->buffer, &i2c, &cal);
 
-    memcpy(setting->buffer, CAL_0V, sizeof(CAL_0V));
-    setting->size = OUT_0V;
-    calibrate(mcp4725, bus, setting);
+    memcpy(settings->buffer, CAL_0V, sizeof(CAL_0V));
+    settings->size = OUT_0V;
+    calibrate(settings->buffer, &i2c, &cal);
 
     /* Enable interrupts. */
     sei();
@@ -53,11 +53,11 @@ int main(void)
         cycle++;
         
         /* Sample flow sensor and send updated data to DAC. */
-        sample_f1031v(f1031v);
-        mcp4725_update(f1031v, mcp4725, bus);
+        sample_f1031v(&sensor);
+        mcp4725_update(&sensor, &dac, &i2c);
 
         /* Update display at slower tic. */
-        (cycle == LCD_REFRESH_CYCLES) ? report_data(f1031v, mcp4725) : 0;
+        (cycle == LCD_REFRESH_CYCLES) ? report_data(&sensor, &dac) : 0;
 
         /* Sleep and begin conversion. */
         asm("sleep \n\t");
