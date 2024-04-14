@@ -4,8 +4,6 @@
 #define CAL_VOLTS_5 "5V Calibration"
 
 enum MAGIC_NUMBERS {
-    VOLTS_0 = 0x0000,
-    VOLTS_5 = 0xFFFF,
     LCD_REFRESH_CYCLES = 255
 };
 
@@ -28,16 +26,7 @@ int main(void)
     dac_t dac;
     i2c_t i2c;
     sensor_t sensor;
-    cal_t cal, *cal_settings = &cal;
-
-    /* Send calibration signal. */
-    memcpy(cal_settings->buffer, CAL_VOLTS_5, sizeof(CAL_VOLTS_5));
-    cal_settings->level = VOLTS_5;
-    calibrate(cal_settings->buffer, &i2c, &cal);
-
-    memcpy(cal_settings->buffer, CAL_VOLTS_0, sizeof(CAL_VOLTS_0));
-    cal_settings->level = VOLTS_0;
-    calibrate(cal_settings->buffer, &i2c, &cal);
+    cal_t cal;
 
     /* Enable interrupts. */
     sei();
