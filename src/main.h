@@ -33,7 +33,7 @@ typedef struct {
 
 typedef struct {
     char buffer[15];
-    uint16_t size;
+    uint16_t level;
 } cal_t;
 
 void adc_init(void);

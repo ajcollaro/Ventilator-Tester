@@ -19,7 +19,7 @@ void mcp4725_tx(dac_t *mcp4725, i2c_t *bus)
     i2c_tx_start();
 
     /* SLA+W -> CO -> MSBs -> LSBs = 4 bytes total. */
-    bus->device = DEVICE_ADDRESS_SIM;
+    bus->device = DEVICE_ADDRESS;
     bus->command = CO;
     bus->byte2 = mcp4725->byte_hi;
     bus->byte3 = mcp4725->byte_lo;

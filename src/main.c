@@ -1,11 +1,11 @@
 #include "main.h"
 
-#define CAL_5V " 5V Calibration"
-#define CAL_0V " 0V Calibration"
+#define CAL_VOLTS_0 "0V Calibration"
+#define CAL_VOLTS_5 "5V Calibration"
 
 enum MAGIC_NUMBERS {
-    OUT_5V = 0xFFFF,
-    OUT_0V = 0x0000,
+    VOLTS_0 = 0x0000,
+    VOLTS_5 = 0xFFFF,
     LCD_REFRESH_CYCLES = 255
 };
 
@@ -28,16 +28,16 @@ int main(void)
     dac_t dac;
     i2c_t i2c;
     sensor_t sensor;
-    cal_t cal, *settings = &cal;
+    cal_t cal, *cal_settings = &cal;
 
     /* Send calibration signal. */
-    memcpy(settings->buffer, CAL_5V, sizeof(CAL_5V));
-    settings->size = OUT_5V;
-    calibrate(settings->buffer, &i2c, &cal);
+    memcpy(cal_settings->buffer, CAL_VOLTS_5, sizeof(CAL_VOLTS_5));
+    cal_settings->level = VOLTS_5;
+    calibrate(cal_settings->buffer, &i2c, &cal);
 
-    memcpy(settings->buffer, CAL_0V, sizeof(CAL_0V));
-    settings->size = OUT_0V;
-    calibrate(settings->buffer, &i2c, &cal);
+    memcpy(cal_settings->buffer, CAL_VOLTS_0, sizeof(CAL_VOLTS_0));
+    cal_settings->level = VOLTS_0;
+    calibrate(cal_settings->buffer, &i2c, &cal);
 
     /* Enable interrupts. */
     sei();
