@@ -4,8 +4,6 @@
 #define CAL_0V " 0V Calibration"
 
 enum MAGIC_NUMBERS {
-    OUT_5V = 0xFFFF,
-    OUT_0V = 0x0000,
     LCD_REFRESH_CYCLES = 255
 };
 
@@ -28,16 +26,7 @@ int main(void)
     dac_t dac;
     i2c_t i2c;
     sensor_t sensor;
-    cal_t cal, *settings = &cal;
-
-    /* Send calibration signal. */
-    memcpy(settings->buffer, CAL_5V, sizeof(CAL_5V));
-    settings->size = OUT_5V;
-    calibrate(settings->buffer, &i2c, &cal);
-
-    memcpy(settings->buffer, CAL_0V, sizeof(CAL_0V));
-    settings->size = OUT_0V;
-    calibrate(settings->buffer, &i2c, &cal);
+    cal_t cal;
 
     /* Enable interrupts. */
     sei();
