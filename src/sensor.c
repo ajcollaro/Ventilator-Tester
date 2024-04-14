@@ -1,11 +1,11 @@
 #include "main.h"
 
-void sample_f1031v(sensor_t *f1031v)
+void sample_f1031v(sensor_t *sensor)
 {
     static const float slope = 36.463;
     static const float intercept = -18.036;
 
     /* Get value from register and convert to flow. */
-    f1031v->flow = ((float)ADC / 1023) * 5;
-    f1031v->flow = slope * f1031v->flow + intercept; 
+    sensor->flow = ((float)ADC / 1023) * 5;
+    sensor->flow = slope * sensor->flow + intercept; 
 }

@@ -1,8 +1,5 @@
 #include "main.h"
 
-#define CAL_VOLTS_0 "0V Calibration"
-#define CAL_VOLTS_5 "5V Calibration"
-
 enum MAGIC_NUMBERS {
     LCD_REFRESH_CYCLES = 255
 };
@@ -21,12 +18,15 @@ int main(void)
 
     adc_init();
     lcd_init();
-    i2c_init();
 
     dac_t dac;
     i2c_t i2c;
+    i2c_init(&i2c);
     sensor_t sensor;
     cal_t cal;
+
+    /* Send calibration signal. */
+    calibration_setup(&dac, &i2c, &cal);
 
     /* Enable interrupts. */
     sei();
@@ -43,10 +43,10 @@ int main(void)
         
         /* Sample flow sensor and send updated data to DAC. */
         sample_f1031v(&sensor);
-        mcp4725_update(&sensor, &dac, &i2c);
+        mcp4725_update(&dac, &sensor, &i2c);
 
         /* Update display at slower tic. */
-        (cycle == LCD_REFRESH_CYCLES) ? report_data(&sensor, &dac) : 0;
+        (cycle == LCD_REFRESH_CYCLES) ? report_data(&sensor) : 0;
 
         /* Sleep and begin conversion. */
         asm("sleep \n\t");

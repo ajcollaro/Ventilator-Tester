@@ -5,12 +5,18 @@ enum BUS_SPEED {
     SPEED_TWO = 0x0C /* 400KHz. */
 };
 
-void i2c_tx(i2c_t *bus)
+enum MCP4725_MAGIC_NUMBERS {
+    DEVICE_ADDRESS = 0x63<<1,
+    DEVICE_ADDRESS_SIM = 0xC2,
+    CO = 0x40
+};
+
+void i2c_tx(i2c_t *i2c)
 {
     /* Send bytes of data to slave device. */
-    for(uint8_t i = 0; i <= sizeof(bus->bytes); i++)
+    for(uint8_t i = 0; i <= sizeof(i2c->bytes); i++)
     {
-        TWDR = bus->bytes[i];
+        TWDR = i2c->bytes[i];
         TWCR = (1 << TWINT)|(1 << TWEN);
 
         while(!(TWCR & (1 << TWINT)));
@@ -33,8 +39,12 @@ void i2c_tx_start(void)
     while(!(TWCR & (1 << TWINT)));
 }
 
-void i2c_init(void)
+void i2c_init(i2c_t *i2c)
 {
     /* I2C using two-wire interface. */
     TWBR = SPEED_TWO;
+
+    /* Setup data to be transmitted. */
+    i2c->device = DEVICE_ADDRESS_SIM;
+    i2c->command = CO;
 }

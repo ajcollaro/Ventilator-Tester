@@ -39,17 +39,18 @@ typedef struct {
 void adc_init(void);
 
 void calibrate(dac_t *, i2c_t *, cal_t *);
+void calibration_setup(dac_t *, i2c_t *, cal_t *);
 
 void sample_f1031v(sensor_t *);
 
-void mcp4725_update(sensor_t *, dac_t *, i2c_t *);
+void mcp4725_update(dac_t *, sensor_t *, i2c_t *);
 void mcp4725_tx(dac_t *, i2c_t *);
 void mcp4725_bypass(dac_t *);
 
 void i2c_tx(i2c_t *);
 void i2c_tx_stop(void);
 void i2c_tx_start(void);
-void i2c_init(void);
+void i2c_init(i2c_t *);
 
 void lcd_write(uint8_t *);
 void lcd_tx_data(uint8_t);
@@ -61,5 +62,5 @@ void usart_tx(usart_t *);
 void usart_init(usart_t *);
 
 void write_usart(uint8_t *);
-void report_data(sensor_t *, dac_t *);
+void report_data(sensor_t *);
 void calibration(dac_t *, i2c_t *);

@@ -6,34 +6,29 @@
    0xC2 works in Proteus sim.
 */
 
-enum MCP4725_MAGIC_NUMBERS {
-    DEVICE_ADDRESS = 0x63<<1,
-    DEVICE_ADDRESS_SIM = 0xC2,
-    CO = 0x40,
+enum MAGIC_NUMBERS {
     OFFSET = 50 /* Avoid EPAP underflow. */
 };
 
-void mcp4725_tx(dac_t *mcp4725, i2c_t *bus)
+void mcp4725_tx(dac_t *dac, i2c_t *i2c)
 {
     /* Start. */
     i2c_tx_start();
 
-    /* SLA+W -> CO -> MSBs -> LSBs = 4 bytes total. */
-    bus->device = DEVICE_ADDRESS;
-    bus->command = CO;
-    bus->byte2 = mcp4725->byte_hi;
-    bus->byte3 = mcp4725->byte_lo;
+    /* Send only the two updated bytes of data. */
+    uint8_t data[] = { dac->byte_hi, dac->byte_lo };
+    memcpy(&i2c->bytes[2], data, sizeof(data));
     
-    i2c_tx(bus);
+    i2c_tx(i2c);
 
     /* Release SCK and SDA lines. */
     i2c_tx_stop();
 }
 
-void mcp4725_update(sensor_t *f1031v, dac_t *mcp4725, i2c_t *bus)
+void mcp4725_update(dac_t *dac, sensor_t *sensor, i2c_t *i2c)
 {
     static const uint8_t offset = OFFSET;
-    mcp4725->value = f1031v->flow + offset;
+    dac->value = sensor->flow + offset;
 
-    mcp4725_tx(mcp4725, bus);
+    mcp4725_tx(dac, i2c);
 }
