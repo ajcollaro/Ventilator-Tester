@@ -45,6 +45,6 @@ void i2c_init(i2c_t *i2c)
     TWBR = SPEED_TWO;
 
     /* Setup data to be transmitted. */
-    i2c->device = DEVICE_ADDRESS_SIM;
+    i2c->device = DEVICE_ADDRESS;
     i2c->command = CO;
 }
