@@ -14,7 +14,7 @@ enum MCP4725_MAGIC_NUMBERS {
 void i2c_tx(i2c_t *i2c)
 {
     /* Send bytes of data to slave device. */
-    for(uint8_t i = 0; i <= sizeof(i2c->bytes); i++)
+    for(uint8_t i = 0; i < sizeof(i2c->bytes); i++)
     {
         TWDR = i2c->bytes[i];
         TWCR = (1 << TWINT)|(1 << TWEN);
@@ -45,6 +45,6 @@ void i2c_init(i2c_t *i2c)
     TWBR = SPEED_TWO;
 
     /* Setup data to be transmitted. */
-    i2c->device = DEVICE_ADDRESS;
+    i2c->device = DEVICE_ADDRESS_SIM;
     i2c->command = CO;
 }

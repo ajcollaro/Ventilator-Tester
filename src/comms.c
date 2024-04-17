@@ -2,19 +2,10 @@
 
 #define UNITS " L/min (STP)"
 
-void write_usart(uint8_t *ptr)
-{
-    while(!(*ptr == '\0'))
-    {
-        usart_tx(ptr);
-        ptr++;
-    }
-}
-
 void report_data(sensor_t *sensor)
 {
-    char buffer[15];
-    uint8_t *ptr = &buffer;
+    char buffer[16];
+    char *ptr = &buffer[0];
 
     lcd_blank();
 

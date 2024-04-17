@@ -2,12 +2,13 @@
 
 #include "avr.h"
 #include <avr/interrupt.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef union {
     struct {
-        uint8_t byte_hi;
-        uint8_t byte_lo;
+        uint8_t byte_big;
+        uint8_t byte_little;
     };
     uint16_t value;
 } dac_t;
@@ -21,10 +22,10 @@ typedef union {
     struct {
         uint8_t device;
         uint8_t command;
-        uint8_t byte2;
-        uint8_t byte3;
+        uint8_t byte_big;
+        uint8_t byte_little;
     };
-    uint8_t bytes[3];
+    uint8_t bytes[4];
 } i2c_t;
 
 typedef struct {
@@ -32,7 +33,7 @@ typedef struct {
 } sensor_t;
 
 typedef struct {
-    char buffer[15];
+    char buffer[16];
     uint16_t level;
 } cal_t;
 
@@ -52,15 +53,10 @@ void i2c_tx_stop(void);
 void i2c_tx_start(void);
 void i2c_init(i2c_t *);
 
-void lcd_write(uint8_t *);
+void lcd_write(char *);
 void lcd_tx_data(uint8_t);
 void lcd_tx_cmd(uint8_t);
 void lcd_blank(void);
 void lcd_init(void);
 
-void usart_tx(usart_t *);
-void usart_init(usart_t *);
-
-void write_usart(uint8_t *);
 void report_data(sensor_t *);
-void calibration(dac_t *, i2c_t *);

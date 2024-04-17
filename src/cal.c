@@ -1,7 +1,7 @@
 #include "main.h"
 
-#define CAL_VOLTS_5 "5V Calibration"
-#define CAL_VOLTS_0 "0V Calibration"
+#define CAL_VOLTS_5 " 5V Calibration "
+#define CAL_VOLTS_0 " 0V Calibration "
 
 enum MAGIC_NUMBERS {
     OUT_5V = 0xFFFF,

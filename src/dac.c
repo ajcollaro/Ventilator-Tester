@@ -16,7 +16,7 @@ void mcp4725_tx(dac_t *dac, i2c_t *i2c)
     i2c_tx_start();
 
     /* Send only the two updated bytes of data. */
-    uint8_t data[] = { dac->byte_hi, dac->byte_lo };
+    uint8_t data[] = { dac->byte_big, dac->byte_little };
     memcpy(&i2c->bytes[2], data, sizeof(data));
     
     i2c_tx(i2c);
