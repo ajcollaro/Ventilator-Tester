@@ -7,7 +7,7 @@
 */
 
 enum MAGIC_NUMBERS {
-    OFFSET = 50 /* Avoid EPAP underflow. */
+    OFFSET = 20 /* Avoid EPAP underflow. */
 };
 
 void mcp4725_tx(dac_t *dac, i2c_t *i2c)
@@ -15,7 +15,7 @@ void mcp4725_tx(dac_t *dac, i2c_t *i2c)
     /* Start. */
     i2c_tx_start();
 
-    /* Send only the two updated bytes of data. */
+    /* Send two bytes of sensor data. */
     uint8_t data[] = { dac->byte_big, dac->byte_little };
     memcpy(&i2c->bytes[2], data, sizeof(data));
     
@@ -27,8 +27,6 @@ void mcp4725_tx(dac_t *dac, i2c_t *i2c)
 
 void mcp4725_update(dac_t *dac, sensor_t *sensor, i2c_t *i2c)
 {
-    static const uint8_t offset = OFFSET;
-    dac->value = sensor->flow + offset;
-
+    dac->value = sensor->flow + OFFSET;
     mcp4725_tx(dac, i2c);
 }
