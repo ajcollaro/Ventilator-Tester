@@ -11,11 +11,10 @@
 #define LCD_DATA_PIN3       PORTC3
 #define LCD_DATA_PIN4       PORTC5
 
-enum LCD1602_MAGIC_NUMBERS {
-    LCD_CLEARDISPLAY = 0x01,
-    LCD_INIT4BIT = 0x02,
-    LCD_DISPLAYONCURSOROFF = 0x0C
-};
+/* LCD commands. */
+#define LCD_CLEARDISPLAY 0x01
+#define LCD_INIT4BIT 0x02
+#define LCD_DISPLAYONCURSOROFF 0x0C
 
 static void write_nibble(uint8_t byte)
 {

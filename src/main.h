@@ -1,9 +1,15 @@
 #pragma once
 
-#include "avr.h"
+#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include <stdlib.h>
 #include <string.h>
+
+/* Speed of MCU in Hz. */
+#ifndef F_CPU
+#define F_CPU 16000000
+#endif
 
 typedef union {
     struct {
@@ -22,8 +28,7 @@ typedef union {
     struct {
         uint8_t device;
         uint8_t command;
-        uint8_t byte_big;
-        uint8_t byte_little;
+        uint16_t data_bytes;
     };
     uint8_t bytes[4];
 } i2c_t;
@@ -46,7 +51,6 @@ void sample_f1031v(sensor_t *);
 
 void mcp4725_update(dac_t *, sensor_t *, i2c_t *);
 void mcp4725_tx(dac_t *, i2c_t *);
-void mcp4725_bypass(dac_t *);
 
 void i2c_tx(i2c_t *);
 void i2c_tx_stop(void);

@@ -1,8 +1,6 @@
 #include "main.h"
 
-enum MAGIC_NUMBERS {
-    LCD_REFRESH_CYCLES = 255
-};
+#define LCD_REFRESH_CYCLES 255
 
 ISR(ADC_vect)
 {

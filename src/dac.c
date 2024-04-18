@@ -6,9 +6,8 @@
    0xC2 works in Proteus sim.
 */
 
-enum MAGIC_NUMBERS {
-    OFFSET = 20 /* Avoid EPAP underflow. */
-};
+/* Avoid EPAP underflow. */
+#define OFFSET 20
 
 void mcp4725_tx(dac_t *dac, i2c_t *i2c)
 {
@@ -17,7 +16,7 @@ void mcp4725_tx(dac_t *dac, i2c_t *i2c)
 
     /* Send two bytes of sensor data. */
     uint8_t data[] = { dac->byte_big, dac->byte_little };
-    memcpy(&i2c->bytes[2], data, sizeof(data));
+    memcpy(&i2c->data_bytes, data, sizeof(data));
     
     i2c_tx(i2c);
 

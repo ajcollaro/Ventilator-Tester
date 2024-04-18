@@ -1,15 +1,13 @@
 #include "main.h"
 
-enum BUS_SPEED {
-    SPEED_ONE = 0x48, /* 100KHz. */
-    SPEED_TWO = 0x0C /* 400KHz. */
-};
+/* i2c bus speed. */
+#define I2C_SPEED_ONE 0x48 /* 100KHz. */
+#define I2C_SPEED_TWO 0x0C /* 400KHz. */
 
-enum MCP4725_MAGIC_NUMBERS {
-    DEVICE_ADDRESS = 0x63<<1,
-    DEVICE_ADDRESS_SIM = 0xC2,
-    CO = 0x40
-};
+/* Addresses and commands. */
+#define DEVICE_ADDRESS 0x63<<1
+#define DEVICE_ADDRESS_SIM 0xC2
+#define CO 0x40
 
 void i2c_tx(i2c_t *i2c)
 {
@@ -42,7 +40,7 @@ void i2c_tx_start(void)
 void i2c_init(i2c_t *i2c)
 {
     /* I2C using two-wire interface. */
-    TWBR = SPEED_TWO;
+    TWBR = I2C_SPEED_TWO;
 
     /* Setup data to be transmitted. */
     i2c->device = DEVICE_ADDRESS;
