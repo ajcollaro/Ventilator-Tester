@@ -4,8 +4,7 @@
 
 ISR(ADC_vect)
 {
-    /* Re-enter loop to increment cycle counter.
-       Avoid static variable held in SRAM. */
+    /* Re-enter loop to increment cycle counter. */
 }
 
 int main(void)
@@ -27,7 +26,7 @@ int main(void)
     calibration_setup(&dac, &i2c, &cal);
 
     /* Enable interrupts. */
-    sei();
+    asm("sei \n\t");
 
     /* ADC noise reduction mode. */
     SMCR |= (1 << SE);

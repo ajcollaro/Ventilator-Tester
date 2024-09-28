@@ -16,7 +16,7 @@ void mcp4725_tx(dac_t *dac, i2c_t *i2c)
 
     /* Send two bytes of sensor data. */
     uint8_t data[] = { dac->byte_big, dac->byte_little };
-    memcpy(&i2c->data_bytes, data, sizeof(data));
+    memcpy(&i2c->data, data, sizeof(data));
     
     i2c_tx(i2c);
 

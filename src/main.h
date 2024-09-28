@@ -11,6 +11,7 @@
 #define F_CPU 16000000
 #endif
 
+/* Structures. */
 typedef union {
     struct {
         uint8_t byte_big;
@@ -20,15 +21,16 @@ typedef union {
 } dac_t;
 
 typedef struct {
-    uint8_t byte;
-    uint16_t baud, prescale;
+    uint8_t data;
+    uint16_t baud;
+    uint16_t prescale;
 } usart_t;
 
 typedef union {
     struct {
-        uint8_t device;
-        uint8_t command;
-        uint16_t data_bytes;
+        uint8_t addr;
+        uint8_t cmd;
+        uint16_t data;
     };
     uint8_t bytes[4];
 } i2c_t;
@@ -42,6 +44,7 @@ typedef struct {
     uint16_t level;
 } cal_t;
 
+/* Function declarations. */
 void adc_init(void);
 
 void calibrate(dac_t *, i2c_t *, cal_t *);
