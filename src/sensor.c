@@ -2,8 +2,8 @@
 
 void sample_f1031v(sensor_t *sensor)
 {
-    static const float slope = 36.463;
-    static const float intercept = -18.036;
+    const float slope = 36.463;
+    const float intercept = -18.036;
 
     /* Get value from register and convert to flow. */
     sensor->flow = ((float)ADC / 1023) * 5;

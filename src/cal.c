@@ -1,3 +1,5 @@
+#include "i2c.h"
+#include "lcd.h"
 #include "main.h"
 
 #define CAL_NOTIFY "Cal test signal"
@@ -5,12 +7,10 @@
 #define OUT_5V 0xFFFF
 #define OUT_0V 0x0000
 
-void calibrate(dac_t *dac, i2c_t *i2c, cal_t *cal)
+static void calibrate(dac_t *dac, i2c_t *i2c, cal_t *cal)
 {
-    char *ptr = &cal->buffer[0];
-
     lcd_blank();
-    lcd_write(ptr);
+    lcd_tx(&cal->buffer[0]);
 
     dac->value = cal->level;
     mcp4725_tx(dac, i2c);

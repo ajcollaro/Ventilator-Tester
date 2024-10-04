@@ -1,3 +1,5 @@
+#include "i2c.h"
+#include "lcd.h"
 #include "main.h"
 
 #define LCD_REFRESH_CYCLES 255

@@ -1,4 +1,4 @@
-#include "main.h"
+#include "lcd.h"
 
 /* Physical connections to LCD. */
 #define LCD_CONTROL_PORT    PORTL
@@ -25,16 +25,7 @@ static void write_nibble(uint8_t byte)
     (byte & 0x80) ? (LCD_DATA_PORT2 |=  (1 << LCD_DATA_PIN4)) : (LCD_DATA_PORT2 &= ~(1 << LCD_DATA_PIN4));
 }
 
-void lcd_write(char *byte)
-{
-    while((*byte)!='\0')
-    {
-        lcd_tx_data(*byte);
-        byte++;
-    }
-} 
-
-void lcd_tx_data(uint8_t byte)
+static void lcd_tx_data(uint8_t byte)
 {
     /* Send data to LCD. */
     write_nibble(byte);
@@ -54,7 +45,7 @@ void lcd_tx_data(uint8_t byte)
     _delay_us(50);
 }
 
-void lcd_tx_cmd(uint8_t byte)
+static void lcd_tx_cmd(uint8_t byte)
 {
     /* Send command to LCD. */
     write_nibble(byte);
@@ -74,6 +65,15 @@ void lcd_tx_cmd(uint8_t byte)
     LCD_CONTROL_PORT &= ~(1 << LCD_EN_PIN);
     _delay_ms(2);
 }
+
+void lcd_tx(char *byte)
+{
+    while((*byte)!='\0')
+    {
+        lcd_tx_data(*byte);
+        byte++;
+    }
+} 
 
 void lcd_blank(void)
 {

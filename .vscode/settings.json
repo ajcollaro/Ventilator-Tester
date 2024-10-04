@@ -1,11 +1,7 @@
 {
     "files.associations": {
-        "lcd1602.h": "c",
-        "usart.h": "c",
-        "mcp4725.h": "c",
-        "f1031v.h": "c",
-        "sensors.h": "c",
         "main.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "delay.h": "c"
     }
 }

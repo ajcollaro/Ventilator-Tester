@@ -1,4 +1,4 @@
-#include "main.h"
+#include "i2c.h"
 
 /* i2c bus speed. */
 #define I2C_SPEED_ONE 0x48 /* 100KHz. */

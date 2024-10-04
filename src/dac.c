@@ -1,3 +1,4 @@
+#include "i2c.h"
 #include "main.h"
 
 /* Device Address:
